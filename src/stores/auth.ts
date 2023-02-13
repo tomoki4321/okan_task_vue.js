@@ -1,13 +1,17 @@
 import { defineStore } from "pinia";
 import axios, { type AxiosResponse } from "axios";
 
+import { useFlashMessageStore } from "@/stores/flash-message";
+
+
 export const useAuthStore = defineStore({
   id: "auth",
   state: () => ({
     uid: localStorage.getItem("uid"),
     access_token: localStorage.getItem("access-token"),
     client: localStorage.getItem("client"),
-    // returnUrl: null,
+    returnUrl: null,
+    message: ""
   }),
   actions: {
     async signup(
@@ -16,6 +20,7 @@ export const useAuthStore = defineStore({
       password: string,
       password_confirmation: string
     ): Promise<void> {
+      const messageStore = useFlashMessageStore();
       try {
         await axios
           .post("http://localhost:3000/api/v1/auth", {
@@ -32,12 +37,15 @@ export const useAuthStore = defineStore({
             this.client = response.headers["client"];
             this.access_token = response.headers["access-token"];
             console.log("status:", response.status);
+            messageStore.flash("新規登録に成功しました！");
           });
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
+        messageStore.flash(error.response.data.errors.full_messages);
       }
     },
     async login(email: string, password: string): Promise<void> {
+      const messageStore = useFlashMessageStore();
       try {
         await axios
           .post("http://localhost:3000/api/v1/auth/sign_in", {
@@ -52,9 +60,11 @@ export const useAuthStore = defineStore({
             this.client = response.headers["client"];
             this.access_token = response.headers["access-token"];
             console.log("status:", response.status);
+            messageStore.flash("ログインに成功しました！");
           });
-      } catch (error) {
+      } catch (error:any) {
         console.log(error);
+        messageStore.flash(error.response.data.errors[0]);
       }
     },
     async logout(): Promise<void> {

@@ -1,15 +1,23 @@
 <script setup lang="ts">
-import { RouterLink,RouterView } from 'vue-router';
+import { RouterLink,RouterView,useRouter } from 'vue-router';
 import { useAuthStore } from './stores/auth';
+import { useFlashMessageStore } from "@/stores/flash-message";
+
+const messageStore = useFlashMessageStore();
 
 const authStore=useAuthStore();
+const router = useRouter();
 const onLogout = (): void => {
   const authStore = useAuthStore();
   authStore.logout();
   localStorage.removeItem("access-token");
   localStorage.removeItem("uid");
   localStorage.removeItem("client");
+  router.push({ name: "top" });
+  messageStore.flash("ログアウトしました！");
 };
+
+// !authStore.isAuthencated()
 
 </script>
 
@@ -18,19 +26,19 @@ const onLogout = (): void => {
   <header>
     <nav>
       <ul>
-        <template v-if="!authStore.isAuthencated()">
+        <template v-if="authStore.client == null">
           <li><RouterLink to="/sinup">新規登録</RouterLink></li>
           <li><RouterLink to="/login">ログイン</RouterLink></li>
           <li><RouterLink to="/">TOP</RouterLink></li>
         </template>
         <template v-else>
-          <li>テスト</li>
           <li><li><a href="" @click="onLogout">ログアウト</a></li></li>
         </template>
       </ul>
     </nav>
   </header>
   <main>
+    {{ messageStore.text }}
     <RouterView/>
   </main>
 </template>
