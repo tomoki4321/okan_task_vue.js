@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios, { type AxiosResponse } from "axios";
-
+import router from "@/router";
 import { useFlashMessageStore } from "@/stores/flash-message";
 
 
@@ -38,6 +38,7 @@ export const useAuthStore = defineStore({
             this.access_token = response.headers["access-token"];
             console.log("status:", response.status);
             messageStore.flash("新規登録に成功しました！");
+            router.push({ path: "/todo/index" });
           });
       } catch (error: any) {
         console.log(error);
@@ -61,6 +62,7 @@ export const useAuthStore = defineStore({
             this.access_token = response.headers["access-token"];
             console.log("status:", response.status);
             messageStore.flash("ログインに成功しました！");
+            router.push({ path: "/todo/index" });
           });
       } catch (error:any) {
         console.log(error);
