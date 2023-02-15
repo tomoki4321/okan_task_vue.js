@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import axios from "axios";
 const authStore = useAuthStore();
