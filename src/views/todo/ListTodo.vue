@@ -53,6 +53,9 @@ async function DestroyTodo(id): Promise<void> {
           詳細
         </RouterLink>
         <button @click="DestroyTodo(todo.id)">削除</button>
+        <RouterLink v-bind:to="{ name: 'edit', params: { id: todo.id } }">
+          編集
+        </RouterLink>
         </li>
     </ul>
   </div>

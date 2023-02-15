@@ -49,7 +49,19 @@ const router = createRouter({
         };
       },
     },
-    
+    {
+      path: '/todo/edit/:id',
+      name: 'edit',
+      component:()=>{
+        return import("../views/todo/EditTodo.vue");
+      },
+      props: (routes) => {
+        const idNum = Number(routes.params.id);
+        return {
+          id: idNum,
+        };
+      },
+    },
   ]
 })
 
