@@ -5,6 +5,7 @@ import AppTop from '@/views/AppTop.vue'
 import PostTodoVue from '@/views/todo/PostTodo.vue'
 import ListTodo from '@/views/todo/ListTodo.vue'
 import DetailTodoVue from '@/views/todo/DetailTodo.vue'
+import EditTodoVue from '@/views/todo/EditTodo.vue'
 
 
 const router = createRouter({
@@ -47,8 +48,8 @@ const router = createRouter({
           id: idNum,
         };
       },
-    }
-
+    },
+    
   ]
 })
 

@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useAuthStore } from "@/stores/auth";
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
+import { useRouter } from "vue-router";
+
+const router =useRouter();
 const authStore = useAuthStore();
 const index = reactive({
   todos: [],
@@ -21,6 +24,22 @@ async function TodoListUp(): Promise<void> {
       console.log(response.data);
     });
 }
+
+async function DestroyTodo(id): Promise<void> {
+  await axios
+    .delete(`http://localhost:3000/api/v1/tasks/${id}`, {
+      headers: {
+        uid: authStore.uid,
+        "access-token": authStore.access_token,
+        client: authStore.client,
+      },
+    })
+    .then((response: AxiosResponse<any>) => {
+      console.log(response.status);
+      //再描写
+      router.go({ path: "/todo/index" });
+    });
+}
 </script>
 
 <template>
@@ -33,7 +52,8 @@ async function TodoListUp(): Promise<void> {
         <RouterLink v-bind:to="{ name: 'show', params: { id: todo.id } }">
           詳細
         </RouterLink>
-      </li>
+        <button @click="DestroyTodo(todo.id)">削除</button>
+        </li>
     </ul>
   </div>
 </template>
