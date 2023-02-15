@@ -4,6 +4,7 @@ import SinupVue from '@/views/login/Sinup.vue'
 import AppTop from '@/views/AppTop.vue'
 import PostTodoVue from '@/views/todo/PostTodo.vue'
 import ListTodo from '@/views/todo/ListTodo.vue'
+import DetailTodoVue from '@/views/todo/DetailTodo.vue'
 
 
 const router = createRouter({
@@ -33,8 +34,21 @@ const router = createRouter({
       path: '/todo/index',
       name: 'index',
       component: ListTodo
-      
+    },
+    {
+      path: '/todo/:id',
+      name: 'show',
+      component:()=>{
+        return import("../views/todo/DetailTodo.vue");
+      },
+      props: (routes) => {
+        const idNum = Number(routes.params.id);
+        return {
+          id: idNum,
+        };
+      },
     }
+
   ]
 })
 

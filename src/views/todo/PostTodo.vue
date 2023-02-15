@@ -2,14 +2,17 @@
 import {ref,reactive} from 'vue';
 import axios from 'axios';
 import { useAuthStore } from "@/stores/auth";
+import { useRouter } from 'vue-router';
+
+
 
 const authStore =useAuthStore();
-
+const router = useRouter();
 const progressCounter=ref(0);
 const taskData = reactive({
   name:"",
   content:"",
-  limit: "2022-02-15",
+  limit: "2022-02-23",
   priority:2,
   status:2,
   progress:0
@@ -38,9 +41,13 @@ async function postTask(): Promise<void> {
     .post("http://localhost:3000/api/v1/tasks", data,config)
     .then((response) => {
       console.log(response.data);
+      router.push({ path: "/todo/index" });
     });
 }
 
+const ReturnListTodo = ():void=> {
+  router.push({ path: "/todo/index" });
+};
 </script>
 
 
@@ -80,5 +87,6 @@ async function postTask(): Promise<void> {
       <input type="text" v-model="taskData.progress">%
     </div>
     <button @click="postTask">タスク登録</button>
+    <button @click="ReturnListTodo">一覧に戻る</button>
   </div>
 </template>

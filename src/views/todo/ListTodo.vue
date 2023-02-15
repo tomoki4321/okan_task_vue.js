@@ -24,11 +24,15 @@ async function TodoListUp(): Promise<void> {
 </script>
 
 <template>
+  <h1>タスク一覧</h1>
   <div>
     <ul>
       <li v-for="todo in index.todos" :key="todo.id">
         タスク名:{{ todo.name }}
         タスク内容:{{ todo.content }}
+        <RouterLink v-bind:to="{ name: 'show', params: { id: todo.id } }">
+          詳細
+        </RouterLink>
       </li>
     </ul>
   </div>
