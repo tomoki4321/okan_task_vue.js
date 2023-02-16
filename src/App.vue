@@ -48,10 +48,10 @@ const onLogout = (): void => {
 
 
 <style>
-
 header {
   background-color: purple;
   max-height: 100%;
+  width: 100%;
   height:100px;
 }
 
@@ -62,7 +62,9 @@ nav ul {
 
 nav ul li {
   list-style: none;
-  
-  
+}
+
+*{
+  margin:0;
 }
 </style>

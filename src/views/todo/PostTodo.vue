@@ -12,11 +12,13 @@ const progressCounter=ref(0);
 const taskData = reactive({
   name:"",
   content:"",
-  limit: "2022-02-23",
+  limit: "",
   priority:2,
   status:2,
-  progress:0
+  progress:0,
+  // category_id:1
 });
+
 
 
 async function postTask(): Promise<void> {
@@ -28,6 +30,7 @@ async function postTask(): Promise<void> {
       priority: taskData.priority,
       status: taskData.status,
       progress:taskData.progress,
+      // category_id:taskData.category_id
     },
   };
   const config = {
@@ -48,6 +51,15 @@ async function postTask(): Promise<void> {
 const ReturnListTodo = ():void=> {
   router.push({ path: "/todo/index" });
 };
+
+// const todayDate =()=>{
+//   let todaySet = new Date();
+//   let YYYY = todaySet.getFullYear();
+//   let MM = ('00'+(todaySet.getMonth()+1)).slice(-2);
+//   let DD =('00'+ todaySet.getDate()).slice(-2);
+//   let today = YYYY + '-' + MM + '-' + DD;
+//   return today;
+// }
 </script>
 
 
@@ -86,6 +98,16 @@ const ReturnListTodo = ():void=> {
       <progress id="progress" max="100" v-bind:value="progressCounter"></progress>
       <input type="text" v-model="taskData.progress">%
     </div>
+    <!-- <div>
+      <label for="category">カテゴリ</label>
+      <select name="category" id="category" v-model="taskData.category_id">
+        <option value="1"></option>
+        <option value="2">仕事</option>
+        <option value="3">趣味</option>
+        <option value="4">その他</option>
+      </select>
+      <p>選択されたカテゴリ:{{ taskData.category_id }}</p>
+    </div> -->
     <button @click="postTask">タスク登録</button>
     <button @click="ReturnListTodo">一覧に戻る</button>
   </div>
