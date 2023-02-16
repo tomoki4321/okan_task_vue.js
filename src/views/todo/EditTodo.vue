@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref,reactive} from 'vue';
+import {reactive} from 'vue';
 import axios,{type AxiosResponse} from 'axios';
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from 'vue-router';

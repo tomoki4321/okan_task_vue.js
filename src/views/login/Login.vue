@@ -15,6 +15,12 @@ const onLogin = (): void => {
   const password = user.password;
   authStore.login(email, password);
 };
+const guestLogin = (): void => {
+  authStore.guest_login();
+};
+const adminLogin = (): void => {
+  authStore.admin_login();
+};
 </script>
 <template>
   <div>
@@ -32,5 +38,7 @@ const onLogin = (): void => {
       />
     </div>
     <button v-on:click="onLogin">ログイン</button>
-  </div>
+    <button @click="guestLogin">ゲストログイン</button>
+    <button @click="adminLogin">管理者ログイン</button>
+</div>
 </template>

@@ -4,8 +4,11 @@ import SinupVue from '@/views/login/Sinup.vue'
 import AppTop from '@/views/AppTop.vue'
 import PostTodoVue from '@/views/todo/PostTodo.vue'
 import ListTodo from '@/views/todo/ListTodo.vue'
-import DetailTodoVue from '@/views/todo/DetailTodo.vue'
-import EditTodoVue from '@/views/todo/EditTodo.vue'
+import DetailTodo from '@/views/todo/DetailTodo.vue'
+import EditTodo from '@/views/todo/EditTodo.vue'
+import ListUser from '@/views/user/ListUser.vue'
+import EditUser from '@/views/user/EditUser.vue'
+
 
 
 const router = createRouter({
@@ -54,6 +57,24 @@ const router = createRouter({
       name: 'edit',
       component:()=>{
         return import("../views/todo/EditTodo.vue");
+      },
+      props: (routes) => {
+        const idNum = Number(routes.params.id);
+        return {
+          id: idNum,
+        };
+      },
+    },
+    {
+      path: '/user/index',
+      name: "user_index",
+      component: ListUser
+    },
+    {
+      path: "/user/edit/:id",
+      name: "user_edit",
+      component: () => {
+        return import("../views/user/EditUser.vue");
       },
       props: (routes) => {
         const idNum = Number(routes.params.id);
