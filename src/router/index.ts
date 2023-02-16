@@ -6,6 +6,7 @@ import PostTodoVue from '@/views/todo/PostTodo.vue'
 import ListTodo from '@/views/todo/ListTodo.vue'
 import DetailTodoVue from '@/views/todo/DetailTodo.vue'
 import EditTodoVue from '@/views/todo/EditTodo.vue'
+import ListUser from '@/views/user/ListUser.vue'
 
 
 const router = createRouter({
@@ -61,6 +62,11 @@ const router = createRouter({
           id: idNum,
         };
       },
+    },
+    {
+      path: '/user/index',
+      name: "user_index",
+      component: ListUser
     },
   ]
 })

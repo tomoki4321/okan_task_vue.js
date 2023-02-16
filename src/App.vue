@@ -36,6 +36,7 @@ const onLogout = (): void => {
           <li><RouterLink to="/todo/post">新規タスク作成</RouterLink></li>
           <li><RouterLink to="/todo/index">タスク一覧</RouterLink></li>
           <li><a href="" @click="onLogout">ログアウト</a></li>
+          <li v-if="authStore.admin == null"><RouterLink to="/user/index">ユーザー一覧</RouterLink></li>
         </template>
       </ul>
     </nav>
@@ -59,10 +60,18 @@ header {
 nav ul {
   margin: 0;
   padding: 0;
+  float:right;
 }
 
 nav ul li {
   list-style: none;
+  float:left;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+nav{
+  
 }
 
 *{

@@ -11,6 +11,7 @@ export const useAuthStore = defineStore({
     access_token: localStorage.getItem("access-token"),
     client: localStorage.getItem("client"),
     returnUrl: null,
+    admin: localStorage.getItem("admin")
   }),
   actions: {
     async signup(
@@ -41,7 +42,7 @@ export const useAuthStore = defineStore({
           });
       } catch (error: any) {
         console.log(error);
-        messageStore.flash(error.response.data.errors.full_messages);
+        messageStore.flash("ユーザー情報が正しくありません");
       }
     },
     async login(email: string, password: string): Promise<void> {
@@ -113,9 +114,11 @@ export const useAuthStore = defineStore({
             localStorage.setItem("uid", response.headers["uid"]);
             localStorage.setItem("client", response.headers["client"]);
             localStorage.setItem("access-token",response.headers["access-token"]);
+            localStorage.setItem("admin",response.headers["admin"]);
             this.uid = response.headers["uid"];
             this.client = response.headers["client"];
             this.access_token = response.headers["access-token"];
+            this.admin = response.headers["admin"];
             console.log("status:", response.status);
             messageStore.flash("ログインに成功しました！");
             router.push({ path: "/todo/index" });
