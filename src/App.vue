@@ -17,6 +17,7 @@ const onLogout = (): void => {
   messageStore.flash("ログアウトしました！");
 };
 
+
 // !authStore.isAuthencated()
 
 </script>

@@ -11,7 +11,6 @@ export const useAuthStore = defineStore({
     access_token: localStorage.getItem("access-token"),
     client: localStorage.getItem("client"),
     returnUrl: null,
-    message: ""
   }),
   actions: {
     async signup(
@@ -83,6 +82,48 @@ export const useAuthStore = defineStore({
       this.access_token = null;
       this.client = null;
       this.uid = null;
+    },
+    async guest_login(): Promise<void> {
+      const messageStore = useFlashMessageStore();
+      try {
+        await axios
+          .post("http://localhost:3000/api/v1/auth/guest_sign_in", {})
+          .then((response) => {
+            localStorage.setItem("uid", response.headers["uid"]);
+            localStorage.setItem("client", response.headers["client"]);
+            localStorage.setItem("access-token",response.headers["access-token"]);
+            this.uid = response.headers["uid"];
+            this.client = response.headers["client"];
+            this.access_token = response.headers["access-token"];
+            console.log("status:", response.status);
+            messageStore.flash("ログインに成功しました！");
+            router.push({ path: "/todo/index" });
+          });
+      } catch (error: any) {
+        console.log(error.response.status);
+        messageStore.flash(error.response.data.errors[0]);
+      }
+    },
+    async admin_login(): Promise<void> {
+      const messageStore = useFlashMessageStore();
+      try {
+        await axios
+          .post("http://localhost:3000/api/v1/auth/admin_sign_in", {})
+          .then((response) => {
+            localStorage.setItem("uid", response.headers["uid"]);
+            localStorage.setItem("client", response.headers["client"]);
+            localStorage.setItem("access-token",response.headers["access-token"]);
+            this.uid = response.headers["uid"];
+            this.client = response.headers["client"];
+            this.access_token = response.headers["access-token"];
+            console.log("status:", response.status);
+            messageStore.flash("ログインに成功しました！");
+            router.push({ path: "/todo/index" });
+          });
+      } catch (error: any) {
+        console.log(error.response.status);
+        messageStore.flash(error.response.data.errors[0]);
+      }
     },
     isAuthencated(): boolean {
       return !!this.client;
