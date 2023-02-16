@@ -32,7 +32,9 @@ const onLogout = (): void => {
           <li><RouterLink to="/">TOP</RouterLink></li>
         </template>
         <template v-else>
-          <li><li><a href="" @click="onLogout">ログアウト</a></li></li>
+          <li><RouterLink to="/todo/post">新規タスク作成</RouterLink></li>
+          <li><RouterLink to="/todo/index">タスク一覧</RouterLink></li>
+          <li><a href="" @click="onLogout">ログアウト</a></li>
         </template>
       </ul>
     </nav>
@@ -46,10 +48,10 @@ const onLogout = (): void => {
 
 
 <style>
-
 header {
   background-color: purple;
   max-height: 100%;
+  width: 100%;
   height:100px;
 }
 
@@ -60,7 +62,9 @@ nav ul {
 
 nav ul li {
   list-style: none;
-  
-  
+}
+
+*{
+  margin:0;
 }
 </style>
