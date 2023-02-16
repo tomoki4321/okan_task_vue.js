@@ -2,8 +2,12 @@
 import { reactive } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import axios, { type AxiosResponse } from "axios";
+import { useRouter } from "vue-router";
+import { useFlashMessageStore } from "@/stores/flash-message";
 
 const authStore = useAuthStore();
+const router =useRouter();
+const messageStore = useFlashMessageStore();
 const index = reactive({
   users: [],
 });
@@ -22,6 +26,21 @@ async function userListUp(): Promise<void> {
       console.log(response.data);
     });
 }
+
+async function DestroyUser(id): Promise<void> {
+  await axios
+    .delete(`http://localhost:3000/api/v1/admin/users/${id}`, {
+      headers: {
+        uid: authStore.uid,
+        "access-token": authStore.access_token,
+        client: authStore.client,
+      },
+    })
+    .then(() => {
+      messageStore.flash("削除しました");
+      router.go({ path: "/user/index" });
+    });
+}
 </script>
 
 <template>
@@ -31,7 +50,6 @@ async function userListUp(): Promise<void> {
       <th>ユーザー名</th>
       <th>メールアドレス</th>
       <th>権限</th>
-      <th>詳細</th>
       <th>編集</th>
       <th>削除</th>
       <tr v-for="user in index.users" :key="user.id">
@@ -43,6 +61,14 @@ async function userListUp(): Promise<void> {
         </td>
         <td>
           {{ user.admin }}
+        </td>
+        <td>
+          <RouterLink v-bind:to="{ name: 'user_edit', params: { id: user.id } }">
+            編集
+          </RouterLink>
+        </td>
+        <td>
+          <a href="#" @click="DestroyUser(user.id)">削除</a>
         </td>
       </tr>
     </table>
