@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref,reactive} from 'vue';
+import {reactive} from 'vue';
 import axios,{type AxiosResponse} from 'axios';
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from 'vue-router';
@@ -13,7 +13,7 @@ const router = useRouter();
 const taskData = reactive({
   name:"",
   content:"",
-  limit: "2023-02-16",
+  limit: "",
   priority:2,
   status:2,
   progress:0
