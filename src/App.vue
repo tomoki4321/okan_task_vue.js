@@ -13,6 +13,7 @@ const onLogout = (): void => {
   localStorage.removeItem("access-token");
   localStorage.removeItem("uid");
   localStorage.removeItem("client");
+  localStorage.removeItem("admin");
   router.push({ name: "top" });
   messageStore.flash("ログアウトしました！");
 };
@@ -36,7 +37,7 @@ const onLogout = (): void => {
           <li><RouterLink to="/todo/post">新規タスク作成</RouterLink></li>
           <li><RouterLink to="/todo/index">タスク一覧</RouterLink></li>
           <li><a href="" @click="onLogout">ログアウト</a></li>
-          <li v-if="authStore.admin == null"><RouterLink to="/user/index">ユーザー一覧</RouterLink></li>
+          <li v-if="authStore.admin !== null"><RouterLink to="/user/index">ユーザー一覧</RouterLink></li>
         </template>
       </ul>
     </nav>

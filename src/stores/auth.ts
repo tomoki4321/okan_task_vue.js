@@ -114,7 +114,8 @@ export const useAuthStore = defineStore({
             localStorage.setItem("uid", response.headers["uid"]);
             localStorage.setItem("client", response.headers["client"]);
             localStorage.setItem("access-token",response.headers["access-token"]);
-            localStorage.setItem("admin",response.headers["admin"]);
+            // localStorage.setItem("admin",response.headers["admin"]);
+            localStorage.setItem("admin",response.data.data.admin);
             this.uid = response.headers["uid"];
             this.client = response.headers["client"];
             this.access_token = response.headers["access-token"];
@@ -130,6 +131,9 @@ export const useAuthStore = defineStore({
     },
     isAuthencated(): boolean {
       return !!this.client;
+    },
+    isAdmin():boolean{
+      return !!this.admin;
     },
   },
 });
