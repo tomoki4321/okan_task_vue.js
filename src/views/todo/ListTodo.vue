@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive,computed,ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import axios, { type AxiosResponse } from "axios";
 import { useRouter } from "vue-router";
@@ -46,10 +46,32 @@ const changeDate = (date) => {
   return moment(date).format("YYYY年MM月DD日");
 };
 
+const searchWord =ref("");
+
+const searchTodo = computed(()=>{
+  let todos =[];
+  for(let i in index.todos){
+    let todo = index.todos[i];
+    if(searchWord.value !== ""){
+      if((todo.name.indexOf(searchWord.value) !== -1)){
+        todos.push(todo);
+      }
+    }else{
+      return index.todos;
+    }
+  }
+  return todos;
+});
+
 </script>
 
 <template>
   <h1>タスク一覧</h1>
+  <div class="search">
+    <h2>検索</h2>
+    <label for="search">名前で検索</label>
+    <input type="text" v-model="searchWord">
+  </div>
   <div class="box">
     <table>
       <th>タスク名</th>
@@ -61,7 +83,7 @@ const changeDate = (date) => {
       <th>編集</th>
       <th>削除</th>
       <th>投稿日</th>
-      <tr v-for="todo in index.todos" :key="todo.id">
+      <tr v-for="todo in searchTodo" :key="todo.id">
         <td>
           {{ todo.name }}
         </td>
