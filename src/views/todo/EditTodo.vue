@@ -3,6 +3,7 @@ import {reactive} from 'vue';
 import axios,{type AxiosResponse} from 'axios';
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from 'vue-router';
+import { useFlashMessageStore } from "@/stores/flash-message";
 
 interface Props {
   id: number;
@@ -10,15 +11,19 @@ interface Props {
 const props = defineProps<Props>();
 const authStore =useAuthStore();
 const router = useRouter();
+const messageStore = useFlashMessageStore();
 const taskData = reactive({
   name:"",
   content:"",
   limit: "",
   priority:2,
   status:2,
-  progress:0
+  progress:0,
+  category_id:1,
+  task_id:props.id,
 });
 ReceiveTask();
+
 
 
 async function ReceiveTask(): Promise<void> {
@@ -38,6 +43,28 @@ async function ReceiveTask(): Promise<void> {
       taskData.priority = response.data.task.priority;
       taskData.progress = response.data.task.progress;
       console.log(response.data);
+    });
+}
+
+async function labeladd(): Promise<void> {
+  const data = {
+    task_category: {
+      task_id:taskData.task_id,
+      category_id:taskData.category_id
+    },
+  };
+  const config = {
+    headers: {
+      uid: authStore.uid,
+      "access-token": authStore.access_token,
+      client: authStore.client,
+    },
+  };
+  await axios
+    .post("http://localhost:3000/api/v1/tasks/label_add", data,config)
+    .then((response) => {
+      console.log(response.data);
+      messageStore.flash("カテゴリを追加しました。")
     });
 }
 
@@ -107,6 +134,15 @@ const ReturnListTodo = ():void=> {
       <label for="progress">進行度</label>
       <progress id="progress" max="100" v-bind:value="taskData.progress"></progress>
       <input type="text" v-model="taskData.progress">%
+    </div>
+    <div>
+      <label for="label">カテゴリ</label>
+       <select name="label" id="label" v-model="taskData.category_id">
+        <option value="1">仕事</option>
+        <option value="2">趣味</option>
+        <option value="3">その他</option>
+      </select>
+      <button @click.once="labeladd">ラベル追加</button>
     </div>
     <button @click="UpdateTask">タスク更新</button>
     <button @click="ReturnListTodo">一覧に戻る</button>

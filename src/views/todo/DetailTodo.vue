@@ -18,8 +18,10 @@ const taskLimit = ref("");
 const taskStatus = ref();
 const taskPriority =ref();
 const taskProgress = ref();
+const taskCategory =ref();
 
 setShow();
+setLavel();
 async function setShow(): Promise<void> {
   await axios
     .get(`http://localhost:3000/api/v1/tasks/${props.id}`, {
@@ -36,6 +38,22 @@ async function setShow(): Promise<void> {
       taskStatus.value = response.data.task.status;
       taskPriority.value = response.data.task.priority;
       taskProgress.value = response.data.task.progress;
+    });
+}
+
+async function setLavel(): Promise<void> {
+  await axios
+    .get(`http://localhost:3000/api/v1/tasks/${props.id}/label_find`, {
+      headers: {
+        uid: authStore.uid,
+        "access-token": authStore.access_token,
+        client: authStore.client,
+      },
+
+    })
+    .then((response: AxiosResponse<any>) => {
+      taskCategory.value=response.data.category.category_id;
+      console.log(response.data.category.category_id);
     });
 }
 
@@ -91,6 +109,18 @@ const ReturnListTodo = ():void=> {
         <tr>
           <td>進行度</td>
           <td>{{taskProgress }}%<progress id="progress" max="100" v-bind:value="taskProgress"></progress></td>
+        </tr>
+        <tr>
+          <td>カテゴリ</td>
+          <td v-if="taskCategory == 1" >
+            仕事
+          </td>
+          <td v-if="taskCategory == 2" >
+            趣味
+          </td>
+          <td v-if="taskCategory == 3" >
+            その他
+          </td>
         </tr>
       </table>
       <button @click="ReturnListTodo">一覧に戻る</button>
