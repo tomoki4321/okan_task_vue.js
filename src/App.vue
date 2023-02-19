@@ -3,6 +3,7 @@ import { RouterLink,RouterView,useRouter } from 'vue-router';
 import { useAuthStore } from './stores/auth';
 import { useFlashMessageStore } from "@/stores/flash-message";
 
+
 const messageStore = useFlashMessageStore();
 
 const authStore=useAuthStore();
@@ -71,9 +72,7 @@ nav ul li {
   margin-top: 40px;
 }
 
-nav{
-  
-}
+
 
 *{
   margin:0;

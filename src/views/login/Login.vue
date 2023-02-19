@@ -2,6 +2,7 @@
 import { reactive } from "vue";
 import { useAuthStore } from "@/stores/auth";
 
+
 const authStore = useAuthStore();
 
 const user = reactive({
@@ -23,22 +24,34 @@ const adminLogin = (): void => {
 };
 </script>
 <template>
-  <div>
-    <div>
-      <label for="email"> Email </label>
-      <input v-model="user.email" id="Email" type="text" placeholder="Email" />
-    </div>
-    <div>
-      <label for="password"> Password </label>
-      <input
-        v-model="user.password"
-        id="password"
-        type="password"
-        placeholder="******************"
-      />
-    </div>
-    <button v-on:click="onLogin">ログイン</button>
-    <button @click="guestLogin">ゲストログイン</button>
-    <button @click="adminLogin">管理者ログイン</button>
-</div>
+  <div class="login">
+      <v-card class="mx-auto mt-5" width="800px">
+      <v-card-title>
+        <h1>ログイン</h1>
+      </v-card-title>
+      <v-card-text>
+        <v-form>
+          <v-text-field label="メールアドレス" v-model="user.email"/>
+          <v-text-field label="パスワード" v-model="user.password" placeholder="******************"/>
+          <v-row class="justify-center mb-3">
+            <v-btn v-on:click="onLogin" class="mr-4" color="secondary">ログイン</v-btn>
+            <v-btn @click="guestLogin" class="mr-4" color="secondary">ゲストログイン</v-btn>
+            <v-btn @click="adminLogin" color="secondary">管理者ログイン</v-btn>
+          </v-row>
+        </v-form>
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
+
+
+<style scoped>
+.login{
+  margin:auto;
+  padding-top:80px;
+}
+h1{
+  text-align: center;
+  padding-bottom: 20px;
+}
+</style>
