@@ -69,7 +69,7 @@ async function labeladd(): Promise<void> {
     .then((response) => {
       console.log(response.data);
       messageStore.flash("カテゴリを追加しました。");
-      authStore.labels.push(props.id);
+      authStore.labels.push(propsNumber);
       console.log(authStore.labels);
     });
 }
