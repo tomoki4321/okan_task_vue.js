@@ -22,7 +22,7 @@ ReceiveUser();
 
 async function ReceiveUser(): Promise<void> {
   await axios
-    .get(`http://localhost:3000/api/v1/admin/users/${props.id}`, {
+    .get(`http://18.181.5.22/api/v1/admin/users/${props.id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -52,7 +52,7 @@ async function UpdateUser(): Promise<void> {
     },
   };
   await axios
-    .put(`http://localhost:3000/api/v1/admin/users/${props.id}`, data,config)
+    .put(`http://18.181.5.22/api/v1/admin/users/${props.id}`, data,config)
     .then((response) => {
       console.log(response.data);
       messageStore.flash("更新しました！")
@@ -67,20 +67,32 @@ const ReturnListUser = ():void=> {
 
 
 <template>
-  <div>
-    <div>
-      <label for="name">ユーザー名</label>
-      <input type="text" id="name" v-model="userData.name" >
-    </div>
-    <div>
-      <label for="content">メールアドレス</label>
-      <input type="email" id="email" v-model="userData.email" >
-    </div>
-    <div>
-      <label for="limit">パスワード</label>
-      <input type="password" id="password" v-model="userData.password">
-    </div>
-    <button @click="UpdateUser">更新</button>
-    <button @click="ReturnListUser">一覧に戻る</button>
+  <div class="edit">
+      <v-card class="mx-auto mt-5" width="800px">
+      <v-card-title>
+        <h1>ユーザー編集</h1>
+      </v-card-title>
+      <v-card-text>
+        <v-form>
+          <v-text-field label="ユーザー名" v-model="userData.name"/>
+          <v-text-field label="メールアドレス" v-model="userData.email"/>
+          <v-text-field label="パスワード" v-model="userData.password" placeholder="******************"/>
+          <v-row class="justify-center mb-3">
+            <v-btn @click="UpdateUser" class="mr-4" color="secondary">更新</v-btn>
+            <v-btn @click="ReturnListUser" class="mr-4" color="secondary">一覧に戻る</v-btn>
+          </v-row>
+        </v-form>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
+
+<style scoped>
+.edit{
+  padding-top:80px;
+}
+h1{
+  text-align: center;
+  padding-bottom: 20px;
+}
+</style>

@@ -8,13 +8,13 @@ import { useFlashMessageStore } from "@/stores/flash-message";
 const authStore = useAuthStore();
 const router =useRouter();
 const messageStore = useFlashMessageStore();
-const index = reactive({
+const index:any = reactive({
   users: [],
 });
 userListUp();
 async function userListUp(): Promise<void> {
   await axios
-    .get("http://localhost:3000/api/v1/admin/users", {
+    .get("http://18.181.5.22/api/v1/admin/users", {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -27,9 +27,9 @@ async function userListUp(): Promise<void> {
     });
 }
 
-async function DestroyUser(id): Promise<void> {
+async function DestroyUser(id:number): Promise<void> {
   await axios
-    .delete(`http://localhost:3000/api/v1/admin/users/${id}`, {
+    .delete(`http://18.181.5.22/api/v1/admin/users/${id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -38,7 +38,7 @@ async function DestroyUser(id): Promise<void> {
     })
     .then(() => {
       messageStore.flash("削除しました");
-      router.go({ path: "/user/index" });
+      router.go(0);
     });
 }
 </script>

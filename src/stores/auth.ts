@@ -11,7 +11,8 @@ export const useAuthStore = defineStore({
     access_token: localStorage.getItem("access-token"),
     client: localStorage.getItem("client"),
     returnUrl: null,
-    admin: localStorage.getItem("admin")
+    admin: localStorage.getItem("admin"),
+    labels:[]
   }),
   actions: {
     async signup(
@@ -23,7 +24,7 @@ export const useAuthStore = defineStore({
       const messageStore = useFlashMessageStore();
       try {
         await axios
-          .post("http://localhost:3000/api/v1/auth", {
+          .post("http://18.181.5.22/api/v1/auth", {
             name: name,
             email: email,
             password: password,
@@ -49,7 +50,7 @@ export const useAuthStore = defineStore({
       const messageStore = useFlashMessageStore();
       try {
         await axios
-          .post("http://localhost:3000/api/v1/auth/sign_in", {
+          .post("http://18.181.5.22/api/v1/auth/sign_in", {
             email: email,
             password: password,
           })
@@ -70,7 +71,7 @@ export const useAuthStore = defineStore({
       }
     },
     async logout(): Promise<void> {
-      await axios.delete("http://localhost:3000/api/v1/auth/sign_out", {
+      await axios.delete("http://18.181.5.22/api/v1/auth/sign_out", {
         headers: {
           uid: this.uid,
           "access-token": this.access_token,
@@ -88,7 +89,7 @@ export const useAuthStore = defineStore({
       const messageStore = useFlashMessageStore();
       try {
         await axios
-          .post("http://localhost:3000/api/v1/auth/guest_sign_in", {})
+          .post("http://18.181.5.22/api/v1/auth/guest_sign_in", {})
           .then((response) => {
             localStorage.setItem("uid", response.headers["uid"]);
             localStorage.setItem("client", response.headers["client"]);
@@ -109,12 +110,13 @@ export const useAuthStore = defineStore({
       const messageStore = useFlashMessageStore();
       try {
         await axios
-          .post("http://localhost:3000/api/v1/auth/admin_sign_in", {})
+          .post("http://18.181.5.22/api/v1/auth/admin_sign_in", {})
           .then((response) => {
             localStorage.setItem("uid", response.headers["uid"]);
             localStorage.setItem("client", response.headers["client"]);
             localStorage.setItem("access-token",response.headers["access-token"]);
-            localStorage.setItem("admin",response.headers["admin"]);
+            // localStorage.setItem("admin",response.headers["admin"]);
+            localStorage.setItem("admin",response.data.data.admin);
             this.uid = response.headers["uid"];
             this.client = response.headers["client"];
             this.access_token = response.headers["access-token"];
@@ -130,6 +132,9 @@ export const useAuthStore = defineStore({
     },
     isAuthencated(): boolean {
       return !!this.client;
+    },
+    isAdmin():boolean{
+      return !!this.admin;
     },
   },
 });
