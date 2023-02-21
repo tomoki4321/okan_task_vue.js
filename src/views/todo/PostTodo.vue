@@ -3,7 +3,7 @@ import {ref,reactive} from 'vue';
 import axios from 'axios';
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from 'vue-router';
-
+import { useFlashMessageStore } from "@/stores/flash-message";
 
 
 const authStore =useAuthStore();
@@ -19,6 +19,8 @@ const taskData = reactive({
 });
 const priorityItems =["",1,2,3];
 const statusItems =["",1,2,3];
+const messageStore = useFlashMessageStore();
+
 
 
 
@@ -41,10 +43,14 @@ async function postTask(): Promise<void> {
     },
   };
   await axios
-    .post("http://localhost:3000/api/v1/tasks", data,config)
+    .post("http://18.181.5.22/api/v1/tasks", data,config)
     .then((response) => {
       console.log(response.data);
       router.push({ path: "/todo/index" });
+    })
+    .catch((error) => {
+      console.log(error.message);
+      messageStore.flash("必須項目を入力して下さい");
     });
 }
 

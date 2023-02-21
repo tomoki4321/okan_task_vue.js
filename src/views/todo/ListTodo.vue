@@ -7,7 +7,7 @@ import moment from "moment";
 
 const router =useRouter();
 const authStore = useAuthStore();
-const index = reactive({
+const index:any = reactive({
   todos: [],
 });
 const prioritySelectChoise =["","高","中","低"];
@@ -15,7 +15,7 @@ const statusSelectChoise =["","未着手","未完了","完了"];
 TodoListUp();
 async function TodoListUp(): Promise<void> {
   await axios
-    .get("http://localhost:3000/api/v1/tasks", {
+    .get("http://18.181.5.22/api/v1/tasks", {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -28,9 +28,9 @@ async function TodoListUp(): Promise<void> {
     });
 }
 
-async function DestroyTodo(id): Promise<void> {
+async function DestroyTodo(id:number): Promise<void> {
   await axios
-    .delete(`http://localhost:3000/api/v1/tasks/${id}`, {
+    .delete(`http://18.181.5.22/api/v1/tasks/${id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -40,11 +40,11 @@ async function DestroyTodo(id): Promise<void> {
     .then((response: AxiosResponse<any>) => {
       console.log(response.status);
       //再描写
-      router.go({ path: "/todo/index" });
+      router.go(0);
     });
 }
 
-const changeDate = (date) => {
+const changeDate = (date:any) => {
   return moment(date).format("YYYY年MM月DD日");
 };
 
@@ -67,7 +67,7 @@ const searchPriority = ref("");
 const searchStatus = ref("");
 
 const searchTodoName = computed(()=>{
-  let todos =[];
+  let todos:any =[];
   for(let i in index.todos){
     let todo = index.todos[i];
     if(searchName.value !== ""){
@@ -213,7 +213,7 @@ const searchTodoStatus = computed(()=>{
           {{ changeDate(todo.created_at) }}
         </td>
       </tr>
-      <tr v-for="todo in searchTodoPriority" :key="todo.id" v-else-if="searchPriority !== 1">
+      <tr v-for="todo in searchTodoPriority" :key="todo.id" v-else-if="searchPriority !== ''">
         <td>
           {{ todo.name }}
         </td>
@@ -259,7 +259,7 @@ const searchTodoStatus = computed(()=>{
           {{ changeDate(todo.created_at) }}
         </td>
       </tr>
-      <tr v-for="todo in searchTodoStatus" :key="todo.id" v-else-if="searchStatus !== 1">
+      <tr v-for="todo in searchTodoStatus" :key="todo.id" v-else-if="searchStatus !== ''">
         <td>
           {{ todo.name }}
         </td>

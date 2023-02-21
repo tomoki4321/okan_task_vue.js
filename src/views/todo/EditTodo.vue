@@ -27,10 +27,12 @@ ReceiveTask();
 const priorityItems =["",1,2,3];
 const statusItems =["",1,2,3];
 const categoryItems =[1,2,3,4,5];
+const propsNumber= props.id as never;
+
 
 async function ReceiveTask(): Promise<void> {
   await axios
-    .get(`http://localhost:3000/api/v1/tasks/${props.id}`, {
+    .get(`http://18.181.5.22/api/v1/tasks/${props.id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -63,7 +65,7 @@ async function labeladd(): Promise<void> {
     },
   };
   await axios
-    .post("http://localhost:3000/api/v1/tasks/label_add", data,config)
+    .post("http://18.181.5.22/api/v1/tasks/label_add", data,config)
     .then((response) => {
       console.log(response.data);
       messageStore.flash("カテゴリを追加しました。");
@@ -91,7 +93,7 @@ async function UpdateTask(): Promise<void> {
     },
   };
   await axios
-    .patch(`http://localhost:3000/api/v1/tasks/${props.id}`, data,config)
+    .patch(`http://18.181.5.22/api/v1/tasks/${props.id}`, data,config)
     .then((response) => {
       console.log(response.data);
       router.push({ path: "/todo/index" });
@@ -103,7 +105,7 @@ const ReturnListTodo = ():void=> {
 };
 
 const labelPossible = computed(()=>{
-  if(authStore.labels.includes(props.id) == true){
+  if(authStore.labels.includes(propsNumber) == true){
     return true
   }else{
     return false

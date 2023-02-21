@@ -19,12 +19,13 @@ const taskStatus = ref();
 const taskPriority =ref();
 const taskProgress = ref();
 const taskCategory =ref();
+const propsNumber= props.id as never;
 
 setShow();
 
 async function setShow(): Promise<void> {
   await axios
-    .get(`http://localhost:3000/api/v1/tasks/${props.id}`, {
+    .get(`http://18.181.5.22/api/v1/tasks/${props.id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -43,7 +44,7 @@ async function setShow(): Promise<void> {
 
 async function setLavel(): Promise<void> {
   await axios
-    .get(`http://localhost:3000/api/v1/tasks/${props.id}/label_find`, {
+    .get(`http://18.181.5.22/api/v1/tasks/${props.id}/label_find`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -58,7 +59,7 @@ async function setLavel(): Promise<void> {
 }
 
 const router = useRouter();
-const changeDate = (date) => {
+const changeDate = (date:any) => {
   return moment(date).format("YYYY年MM月DD日");
 };
 
@@ -67,7 +68,7 @@ const ReturnListTodo = ():void=> {
 };
 
 const labelPossible = computed(()=>{
-  if(authStore.labels.includes(props.id) == true){
+  if(authStore.labels.includes(propsNumber) == true){
     setLavel();
     return true
   }else{

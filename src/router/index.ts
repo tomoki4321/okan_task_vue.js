@@ -157,12 +157,12 @@ router.beforeEach((to, from, next) => {
   else next();
 });
 //ユーザー管理画面には管理者しか入れない
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  if (to.name == "user_index" && authStore.admin)
-    next({ name: "index" });
-  else next();
-});
+// router.beforeEach((to, from, next) => {
+//   const authStore = useAuthStore();
+//   if (to.name == "user_index" && authStore.admin)
+//     next({ name: "index" });
+//   else next();
+// });
 //ユーザー編集画面には管理者しか入れない
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();

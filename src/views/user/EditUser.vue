@@ -22,7 +22,7 @@ ReceiveUser();
 
 async function ReceiveUser(): Promise<void> {
   await axios
-    .get(`http://localhost:3000/api/v1/admin/users/${props.id}`, {
+    .get(`http://18.181.5.22/api/v1/admin/users/${props.id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -52,7 +52,7 @@ async function UpdateUser(): Promise<void> {
     },
   };
   await axios
-    .put(`http://localhost:3000/api/v1/admin/users/${props.id}`, data,config)
+    .put(`http://18.181.5.22/api/v1/admin/users/${props.id}`, data,config)
     .then((response) => {
       console.log(response.data);
       messageStore.flash("更新しました！")
