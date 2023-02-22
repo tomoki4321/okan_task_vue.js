@@ -97,6 +97,9 @@ async function UpdateTask(): Promise<void> {
     .then((response) => {
       console.log(response.data);
       router.push({ path: "/todo/index" });
+    })
+    .catch((error) => {
+      messageStore.flash("必要項目を記述してください");
     });
 }
 
