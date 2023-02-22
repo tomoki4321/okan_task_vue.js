@@ -57,6 +57,9 @@ async function UpdateUser(): Promise<void> {
       console.log(response.data);
       messageStore.flash("更新しました！")
       router.push({ path: "/user/index" });
+    })
+    .catch((error) => {
+      messageStore.flash("必要項目を記述してください");
     });
 }
 
