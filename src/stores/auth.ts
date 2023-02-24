@@ -6,11 +6,11 @@ import { useFlashMessageStore } from "@/stores/flash-message";
 
 export const useAuthStore = defineStore({
   id: "auth",
-  state: () => ({
+  state: ()=> ({
     uid: localStorage.getItem("uid"),
     access_token: localStorage.getItem("access-token"),
     client: localStorage.getItem("client"),
-    returnUrl: null,
+    // returnUrl: null,
     admin: localStorage.getItem("admin"),
     labels:[]
   }),
@@ -84,6 +84,7 @@ export const useAuthStore = defineStore({
       this.access_token = null;
       this.client = null;
       this.uid = null;
+      this.admin = null;
     },
     async guest_login(): Promise<void> {
       const messageStore = useFlashMessageStore();
@@ -120,7 +121,7 @@ export const useAuthStore = defineStore({
             this.uid = response.headers["uid"];
             this.client = response.headers["client"];
             this.access_token = response.headers["access-token"];
-            this.admin = response.headers["admin"];
+            this.admin = response.data.data.admin;
             console.log("status:", response.status);
             messageStore.flash("ログインに成功しました！");
             router.push({ path: "/todo/index" });

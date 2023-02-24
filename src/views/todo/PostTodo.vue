@@ -49,8 +49,23 @@ async function postTask(): Promise<void> {
       router.push({ path: "/todo/index" });
     })
     .catch((error) => {
-      console.log(error.message);
+      console.log(error.response);
       messageStore.flash("必須項目を入力して下さい");
+      if(taskData.name == "" && taskData.content == "" && taskData.limit ==""){
+        messageStore.flash("タスク名とタスク内容と期限を入力してください");
+      }else if(taskData.name == "" && taskData.content == ""){
+        messageStore.flash("タスク名とタスク内容を入力してください");
+      }else if(taskData.name == "" && taskData.limit == ""){
+        messageStore.flash("タスク名と期限を入力してください");
+      }else if(taskData.content == "" && taskData.limit == ""){
+        messageStore.flash("タスク内容と期限を入力してください");
+      }else if(taskData.name == ""){
+        messageStore.flash("タスク名を入力してください");
+      }else if(taskData.content == ""){
+        messageStore.flash("タスク内容を入力してください");
+      }else if(taskData.limit ==""){
+        messageStore.flash("期限を入力してください");
+      }
     });
 }
 

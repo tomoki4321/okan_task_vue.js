@@ -26,7 +26,8 @@ const onLogout = (): void => {
 
 
 <template>
-  <header>
+    <v-app>
+      <header>
     <ul class="title">
       <h1>IST</h1>
     </ul>
@@ -44,12 +45,11 @@ const onLogout = (): void => {
       </template>
     </ul>
   </header>
-  <main>
+  <v-main>
     {{ messageStore.text }}
     <RouterView/>
-  </main>
-    <v-app>
-      <v-footer class="footer">
+  </v-main>
+      <v-footer class="footer" >
         <v-row justify="center">
           <v-col class="text-center" cols="12">
             <p>
@@ -80,8 +80,7 @@ header {
 .footer {
   background-color: aqua;
   width: 100%;
-  height:80px;
-  position: absolute;
+  max-height:80px;
   bottom: 0;
 }
 
@@ -98,7 +97,7 @@ ul li {
   padding: 20px;
 }
 main{
-  position:relative;
+  
 }
 
 
