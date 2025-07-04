@@ -2,6 +2,7 @@
 import { RouterLink,RouterView,useRouter } from 'vue-router';
 import { useAuthStore } from './stores/auth';
 import { useFlashMessageStore } from "@/stores/flash-message";
+import IST from "@/assets/IST.png";
 
 
 const messageStore = useFlashMessageStore();
@@ -30,6 +31,7 @@ const onLogout = (): void => {
       <header>
     <ul class="title">
       <h1>IST</h1>
+      <!-- <v-img :src="IST" height="60px"></v-img> -->
     </ul>
     <ul>
       <template v-if="authStore.client == null">

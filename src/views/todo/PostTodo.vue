@@ -43,7 +43,7 @@ async function postTask(): Promise<void> {
     },
   };
   await axios
-    .post("http://18.181.5.22/api/v1/tasks", data,config)
+    .post("http://35.75.39.248/api/v1/tasks", data,config)
     .then((response) => {
       console.log(response.data);
       router.push({ path: "/todo/index" });
