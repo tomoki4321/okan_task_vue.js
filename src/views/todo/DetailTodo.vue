@@ -25,7 +25,7 @@ setShow();
 
 async function setShow(): Promise<void> {
   await axios
-    .get(`http://18.181.5.22/api/v1/tasks/${props.id}`, {
+    .get(`http://35.75.39.248/api/v1/tasks/${props.id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -44,7 +44,7 @@ async function setShow(): Promise<void> {
 
 async function setLavel(): Promise<void> {
   await axios
-    .get(`http://18.181.5.22/api/v1/tasks/${props.id}/label_find`, {
+    .get(`http://35.75.39.248/api/v1/tasks/${props.id}/label_find`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,

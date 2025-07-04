@@ -15,7 +15,7 @@ const statusSelectChoise =["","未着手","未完了","完了"];
 TodoListUp();
 async function TodoListUp(): Promise<void> {
   await axios
-    .get("http://18.181.5.22/api/v1/tasks", {
+    .get("http://35.75.39.248/api/v1/tasks", {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -30,7 +30,7 @@ async function TodoListUp(): Promise<void> {
 
 async function DestroyTodo(id:number): Promise<void> {
   await axios
-    .delete(`http://18.181.5.22/api/v1/tasks/${id}`, {
+    .delete(`http://35.75.39.248/api/v1/tasks/${id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -115,17 +115,17 @@ const searchTodoStatus = computed(()=>{
       if(todo.status == 1){
         todos.push(todo);
       }
-      break;
+      // break;
     }else if(searchStatus.value == "未完了"){
       if(todo.status == 2){
         todos.push(todo);
       }
-      break;
+      // break;
     }else{
       if(todo.status == 3){
         todos.push(todo);
       }
-      break;
+      // break;
     }
   }
   return todos;
