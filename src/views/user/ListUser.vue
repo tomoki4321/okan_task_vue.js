@@ -14,7 +14,7 @@ const index:any = reactive({
 userListUp();
 async function userListUp(): Promise<void> {
   await axios
-    .get("http://18.181.5.22/api/v1/admin/users", {
+    .get("http://35.75.39.248/api/v1/admin/users", {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -29,7 +29,7 @@ async function userListUp(): Promise<void> {
 
 async function DestroyUser(id:number): Promise<void> {
   await axios
-    .delete(`http://18.181.5.22/api/v1/admin/users/${id}`, {
+    .delete(`http://35.75.39.248/api/v1/admin/users/${id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
