@@ -78,13 +78,13 @@ export const useAuthStore = defineStore({
           client: this.client,
         },
       });
-      // localStorage.removeItem("access-token");
-      // localStorage.removeItem("uid");
-      // localStorage.removeItem("client");
-      this.access_token = null;
-      this.client = null;
-      this.uid = null;
-      this.admin = null;
+      this.access_token = "";
+      this.client = "";
+      this.uid = "";
+      this.admin = "";
+      localStorage.removeItem("access-token");
+      localStorage.removeItem("uid");
+      localStorage.removeItem("client");
     },
     async guest_login(): Promise<void> {
       const messageStore = useFlashMessageStore();
