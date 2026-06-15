@@ -24,7 +24,7 @@ export const useAuthStore = defineStore({
       const messageStore = useFlashMessageStore();
       try {
         await axios
-          .post("http://43.207.26.25//api/v1/auth", {
+          .post(`${import.meta.env.VITE_API_BASE_URL}/api/v1/auth`, {
             name: name,
             email: email,
             password: password,
@@ -50,7 +50,7 @@ export const useAuthStore = defineStore({
       const messageStore = useFlashMessageStore();
       try {
         await axios
-          .post("http://43.207.26.25/api/v1/auth/sign_in", {
+          .post(`${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/sign_in`, {
             email: email,
             password: password,
           })
@@ -71,7 +71,7 @@ export const useAuthStore = defineStore({
       }
     },
     async logout(): Promise<void> {
-      await axios.delete("http://43.207.26.25/api/v1/auth/sign_out", {
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/sign_out`, {
         headers: {
           uid: this.uid,
           "access-token": this.access_token,
@@ -90,7 +90,7 @@ export const useAuthStore = defineStore({
       const messageStore = useFlashMessageStore();
       try {
         await axios
-          .post("http://43.207.26.25/api/v1/auth/guest_sign_in", {})
+          .post(`${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/guest_sign_in`, {})
           .then((response) => {
             localStorage.setItem("uid", response.headers["uid"]);
             localStorage.setItem("client", response.headers["client"]);
@@ -111,7 +111,7 @@ export const useAuthStore = defineStore({
       const messageStore = useFlashMessageStore();
       try {
         await axios
-          .post("http://43.207.26.25/api/v1/auth/admin_sign_in", {})
+          .post(`${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/admin_sign_in`, {})
           .then((response) => {
             localStorage.setItem("uid", response.headers["uid"]);
             localStorage.setItem("client", response.headers["client"]);

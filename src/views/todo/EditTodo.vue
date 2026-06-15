@@ -32,7 +32,7 @@ const propsNumber= props.id as never;
 
 async function ReceiveTask(): Promise<void> {
   await axios
-    .get(`http://43.207.26.25/api/v1/tasks/${props.id}`, {
+    .get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/tasks/${props.id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -65,7 +65,7 @@ async function labeladd(): Promise<void> {
     },
   };
   await axios
-    .post("http://43.207.26.25/api/v1/tasks/label_add", data,config)
+    .post(`${import.meta.env.VITE_API_BASE_URL}/api/v1/tasks/label_add`, data,config)
     .then((response) => {
       console.log(response.data);
       messageStore.flash("カテゴリを追加しました。");
@@ -93,7 +93,7 @@ async function UpdateTask(): Promise<void> {
     },
   };
   await axios
-    .patch(`http://43.207.26.25/api/v1/tasks/${props.id}`, data,config)
+    .patch(`${import.meta.env.VITE_API_BASE_URL}/api/v1/tasks/${props.id}`, data,config)
     .then((response) => {
       console.log(response.data);
       router.push({ path: "/todo/index" });
