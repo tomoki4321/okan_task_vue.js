@@ -25,7 +25,7 @@ setShow();
 
 async function setShow(): Promise<void> {
   await axios
-    .get(`http://43.207.26.25/api/v1/tasks/${props.id}`, {
+    .get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/tasks/${props.id}`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
@@ -44,7 +44,7 @@ async function setShow(): Promise<void> {
 
 async function setLavel(): Promise<void> {
   await axios
-    .get(`http://43.207.26.25/api/v1/tasks/${props.id}/label_find`, {
+    .get(`${import.meta.env.VITE_API_BASE_URL}/api/v1/tasks/${props.id}/label_find`, {
       headers: {
         uid: authStore.uid,
         "access-token": authStore.access_token,
