@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import {reactive,computed} from 'vue';
+import {reactive,computed,ref} from 'vue';
 import axios,{type AxiosResponse} from 'axios';
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from 'vue-router';
 import { useFlashMessageStore } from "@/stores/flash-message";
+import { nameRules, contentRules, limitRules } from "@/stores/validationRules";
 
 interface Props {
   id: number;
@@ -28,6 +29,9 @@ const priorityItems =["",1,2,3];
 const statusItems =["",1,2,3];
 const categoryItems =[1,2,3,4,5];
 const propsNumber= props.id as never;
+
+//バリデーション
+const form = ref();
 
 
 async function ReceiveTask(): Promise<void> {
@@ -75,6 +79,11 @@ async function labeladd(): Promise<void> {
 }
 
 async function UpdateTask(): Promise<void> {
+  const { valid } = await form.value.validate();
+  if (!valid) {
+    messageStore.flash("入力内容を確認してください");
+    return;
+  }
   const data = {
     task: {
       name: taskData.name,
@@ -97,24 +106,10 @@ async function UpdateTask(): Promise<void> {
     .then((response) => {
       console.log(response.data);
       router.push({ path: "/todo/index" });
+      messageStore.flash("タスクを編集しました");
     })
     .catch((error) => {
-      messageStore.flash("必要項目を記述してください");
-      if(taskData.name == "" && taskData.content == "" && taskData.limit ==""){
-        messageStore.flash("タスク名とタスク内容と期限を入力してください");
-      }else if(taskData.name == "" && taskData.content == ""){
-        messageStore.flash("タスク名とタスク内容を入力してください");
-      }else if(taskData.name == "" && taskData.limit == ""){
-        messageStore.flash("タスク名と期限を入力してください");
-      }else if(taskData.content == "" && taskData.limit == ""){
-        messageStore.flash("タスク内容と期限を入力してください");
-      }else if(taskData.name == ""){
-        messageStore.flash("タスク名を入力してください");
-      }else if(taskData.content == ""){
-        messageStore.flash("タスク内容を入力してください");
-      }else if(taskData.limit ==""){
-        messageStore.flash("期限を入力してください");
-      }
+      messageStore.flash("更新に失敗しました。入力内容を確認してください");
     });
 }
 
@@ -139,10 +134,10 @@ const labelPossible = computed(()=>{
         <h1>タスク編集</h1>
       </v-card-title>
       <v-card-text>
-        <v-form>
-          <v-text-field label="タスク名" v-model="taskData.name"/>
-          <v-textarea label="内容" v-model="taskData.content"></v-textarea>
-          <v-text-field label="期日" v-model="taskData.limit" type="date"/>
+        <v-form ref="form">
+          <v-text-field label="タスク名" v-model="taskData.name" :rules="nameRules"/>
+          <v-textarea label="内容" v-model="taskData.content" :rules="contentRules"></v-textarea>
+          <v-text-field label="期日" v-model="taskData.limit" type="date" :rules="limitRules"/>
           <v-select  v-model="taskData.priority" label="優先度" :items="priorityItems"></v-select>
           <label for="priority">1:高 2:中 3:低</label>
           <v-select  v-model="taskData.status" label="ステータス" :items="statusItems"></v-select>

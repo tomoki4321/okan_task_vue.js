@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { emailRules,passwordRules } from "@/stores/validationRules";
 
 
 const authStore = useAuthStore();
@@ -10,7 +11,12 @@ const user = reactive({
   password: "",
 });
 
-const onLogin = (): void => {
+//バリデーション
+const form = ref();
+
+const onLogin = async (): Promise<void> => {
+  const { valid } = await form.value.validate();
+  if (!valid) return;
   const authStore = useAuthStore();
   const email = user.email;
   const password = user.password;
@@ -30,10 +36,10 @@ const adminLogin = (): void => {
         <h1>ログイン</h1>
       </v-card-title>
       <v-card-text>
-        <v-form>
-          <v-text-field label="メールアドレス" v-model="user.email"/>
-          <v-text-field label="パスワード" v-model="user.password" placeholder="******************"/>
-          <v-row class="justify-center mb-3">
+        <v-form ref="form">
+          <v-text-field label="メールアドレス" v-model="user.email" :rules="emailRules"/>
+          <v-text-field label="パスワード" v-model="user.password" :rules="passwordRules" placeholder="******************"/>
+          <v-row class="justify-center mb-3 mt-3">
             <v-btn v-on:click="onLogin" class="mr-4" color="secondary">ログイン</v-btn>
             <v-btn @click="guestLogin" class="mr-4" color="secondary">ゲストログイン</v-btn>
             <v-btn @click="adminLogin" color="secondary">管理者ログイン</v-btn>
