@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from 'vue-router';
 import { useFlashMessageStore } from "@/stores/flash-message";
-
+import { nameRules, contentRules, limitRules } from "@/stores/validationRules";
 
 const authStore =useAuthStore();
 const router = useRouter();
@@ -21,10 +21,16 @@ const priorityItems =["",1,2,3];
 const statusItems =["",1,2,3];
 const messageStore = useFlashMessageStore();
 
-
-
+//バリデーション
+const form = ref();
 
 async function postTask(): Promise<void> {
+  // フォーム全体のバリデーションを実行
+  const { valid } = await form.value.validate();
+  if (!valid) {
+    messageStore.flash("入力内容を確認してください");
+    return;
+  }
   const data = {
     task: {
       name: taskData.name,
@@ -47,25 +53,11 @@ async function postTask(): Promise<void> {
     .then((response) => {
       console.log(response.data);
       router.push({ path: "/todo/index" });
+      messageStore.flash("タスクを作成しました");
     })
     .catch((error) => {
       console.log(error.response);
-      messageStore.flash("必須項目を入力して下さい");
-      if(taskData.name == "" && taskData.content == "" && taskData.limit ==""){
-        messageStore.flash("タスク名とタスク内容と期限を入力してください");
-      }else if(taskData.name == "" && taskData.content == ""){
-        messageStore.flash("タスク名とタスク内容を入力してください");
-      }else if(taskData.name == "" && taskData.limit == ""){
-        messageStore.flash("タスク名と期限を入力してください");
-      }else if(taskData.content == "" && taskData.limit == ""){
-        messageStore.flash("タスク内容と期限を入力してください");
-      }else if(taskData.name == ""){
-        messageStore.flash("タスク名を入力してください");
-      }else if(taskData.content == ""){
-        messageStore.flash("タスク内容を入力してください");
-      }else if(taskData.limit ==""){
-        messageStore.flash("期限を入力してください");
-      }
+      messageStore.flash("登録に失敗しました。入力内容を確認してください");
     });
 }
 
@@ -91,10 +83,10 @@ const ReturnListTodo = ():void=> {
         <h1>新規タスク作成</h1>
       </v-card-title>
       <v-card-text>
-        <v-form>
-          <v-text-field label="タスク名" v-model="taskData.name"/>
-          <v-textarea label="内容" v-model="taskData.content"></v-textarea>
-          <v-text-field label="期日" v-model="taskData.limit" type="date"/>
+        <v-form ref="form">
+          <v-text-field label="タスク名" v-model="taskData.name" :rules="nameRules"/>
+          <v-textarea label="内容" v-model="taskData.content" :rules="contentRules"></v-textarea>
+          <v-text-field label="期日" v-model="taskData.limit" type="date" :rules="limitRules"/>
           <v-select  v-model="taskData.priority" label="優先度" :items="priorityItems"></v-select>
           <label for="priority">1:高 2:中 3:低</label>
           <v-select  v-model="taskData.status" label="ステータス" :items="statusItems"></v-select>
