@@ -25,9 +25,29 @@ const taskData = reactive({
 });
 ReceiveTask();
 
-const priorityItems =["",1,2,3];
-const statusItems =["",1,2,3];
-const categoryItems =[1,2,3,4,5];
+// 優先度プルダウンの選択肢
+const priorityOptions = [
+  { value: 1, label: "高" },
+  { value: 2, label: "中" },
+  { value: 3, label: "低" },
+];
+// ステータスチップの定義
+const statusItems = [
+  { value: 1, label: "未着手", color: "blue-grey" },
+  { value: 2, label: "未完了", color: "amber" },
+  { value: 3, label: "完了", color: "teal" },
+];
+// カテゴリプルダウンの選択肢
+const categoryOptions = [
+  { value: 1, label: "仕事" },
+  { value: 2, label: "趣味" },
+  { value: 3, label: "買い物" },
+  { value: 4, label: "アイデア" },
+  { value: 5, label: "その他" },
+];
+// 進捗バーの色
+const progressColor = (p?: number) => ((p ?? 0) >= 100 ? "teal" : "blue");
+
 const propsNumber= props.id as never;
 
 //バリデーション
@@ -126,36 +146,64 @@ const labelPossible = computed(()=>{
 });
 </script>
 
-
 <template>
-  <div class="edit">
-      <v-card class="mx-auto mt-5" width="800px">
-      <v-card-title>
-        <h1>タスク編集</h1>
+  <div style="max-width: 640px; margin: 0 auto; padding: 32px 16px;">
+    <v-card rounded="xl" variant="outlined" class="pa-2">
+      <v-card-title class="d-flex align-center ga-3 pt-4">
+        <v-avatar rounded="lg" color="blue-lighten-4" size="40">
+          <v-icon icon="mdi-pencil" color="blue-darken-2" />
+        </v-avatar>
+        <span class="text-h6">タスク編集</span>
       </v-card-title>
       <v-card-text>
         <v-form ref="form">
-          <v-text-field label="タスク名" v-model="taskData.name" :rules="nameRules"/>
-          <v-textarea label="内容" v-model="taskData.content" :rules="contentRules"></v-textarea>
-          <v-text-field label="期日" v-model="taskData.limit" type="date" :rules="limitRules"/>
-          <v-select  v-model="taskData.priority" label="優先度" :items="priorityItems"></v-select>
-          <label for="priority">1:高 2:中 3:低</label>
-          <v-select  v-model="taskData.status" label="ステータス" :items="statusItems"></v-select>
-          <label for="priority">1:未着手 2:未完了 3:完了</label>
-          <v-row class="justify-center mt-3">
-            <label for="progress" class="mt-3">進行度</label>
-            <progress id="progress" max="100" v-bind:value="taskData.progress" class="mt-3"></progress>
-            <v-text-field label="進行度(%)" v-model="taskData.progress"/>
-          </v-row>
-          <v-row v-if="labelPossible == false">
-            <v-select  v-model="taskData.category_id" label="カテゴリ" :items="categoryItems"></v-select>
-            <label for="priority" class="mt-3">1:仕事 2:趣味 3:買い物 4:アイデア 5:その他</label>
-            <v-btn @click.once="labeladd" class="mr-4" color="blue">カテゴリ追加</v-btn>
-          </v-row>
-          <v-row class="justify-center mb-3">
-            <v-btn @click="UpdateTask" class="mr-4" color="secondary">タスク更新</v-btn>
-            <v-btn @click="ReturnListTodo" class="mr-4" color="secondary">一覧に戻る</v-btn>
-          </v-row>
+          <v-text-field v-model="taskData.name" label="タスク名"
+            :rules="nameRules" variant="outlined" :rounded="'xl'" class="mb-3" />
+          <v-textarea v-model="taskData.content" label="内容"
+            :rules="contentRules" variant="outlined" :rounded="'xl'" class="mb-3"></v-textarea>
+
+          <div class="d-flex ga-3 flex-wrap">
+            <v-text-field v-model="taskData.limit" label="期日" type="date"
+              :rules="limitRules" variant="outlined" :rounded="'xl'" style="flex: 1 1 240px;" />
+            <v-select v-model="taskData.priority" label="優先度"
+              :items="priorityOptions" item-title="label" item-value="value"
+              variant="outlined" :rounded="'xl'" style="flex: 1 1 200px;" />
+          </div>
+
+          <div class="text-body-2 text-medium-emphasis mb-2 mt-2">ステータス</div>
+          <div class="d-flex ga-2 mb-6 flex-wrap">
+            <v-chip v-for="s in statusItems" :key="s.value"
+              :color="taskData.status === s.value ? s.color : undefined"
+              :variant="taskData.status === s.value ? 'flat' : 'tonal'"
+              @click="taskData.status = s.value">{{ s.label }}</v-chip>
+          </div>
+
+          <div class="text-body-2 text-medium-emphasis mb-2">進行度</div>
+          <v-progress-linear :model-value="Number(taskData.progress)"
+            :color="progressColor(Number(taskData.progress))" height="8" rounded />
+          <div style="text-align: right; margin-top: 6px; margin-bottom: 24px;">
+            <span class="text-body-1 font-weight-medium">{{ taskData.progress || 0 }}%</span>
+          </div>
+          <v-text-field v-model="taskData.progress" label="進行度(%)"
+            type="number" variant="outlined" :rounded="'xl'" hide-details style="margin-bottom: 24px;" />
+
+          <!-- カテゴリ追加：未追加のときだけ表示（区切り線で分離） -->
+          <div v-if="labelPossible === false" style="border-top: 1px solid rgba(0,0,0,0.08); padding-top: 16px; margin-bottom: 24px;">
+            <div class="text-body-2 text-medium-emphasis mb-2">カテゴリ追加</div>
+            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+              <v-select v-model="taskData.category_id" label="カテゴリ"
+                :items="categoryOptions" item-title="label" item-value="value"
+                variant="outlined" :rounded="'xl'" hide-details style="flex: 1 1 200px;" />
+              <v-btn @click.once="labeladd" rounded="pill" color="blue" prepend-icon="mdi-tag-plus">追加</v-btn>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: center; gap: 20px;">
+            <v-btn @click="UpdateTask" rounded="pill" color="blue-darken-2"
+              size="large" style="min-width: 280px;">タスク更新</v-btn>
+            <v-btn @click="ReturnListTodo" rounded="pill" variant="outlined"
+              size="large">戻る</v-btn>
+          </div>
         </v-form>
       </v-card-text>
     </v-card>
@@ -163,12 +211,4 @@ const labelPossible = computed(()=>{
 </template>
 
 <style scoped>
-.edit{
-  padding-top:10px;
-  padding-bottom:10px;
-}
-h1{
-  text-align: center;
-  padding-bottom: 20px;
-}
 </style>

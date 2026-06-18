@@ -17,9 +17,8 @@ const taskData = reactive({
   status:2,
   progress:0,
 });
-// const priorityItems =["",1,2,3];
-// const statusItems =["",1,2,3];
-// const messageStore = useFlashMessageStore();
+
+const messageStore = useFlashMessageStore();
 
 // 優先度・ステータスの選択チップ定義
 const priorityItems = [
@@ -83,47 +82,7 @@ async function postTask(): Promise<void> {
 const ReturnListTodo = ():void=> {
   router.push({ path: "/todo/index" });
 };
-
-// const todayDate =()=>{
-//   let todaySet = new Date();
-//   let YYYY = todaySet.getFullYear();
-//   let MM = ('00'+(todaySet.getMonth()+1)).slice(-2);
-//   let DD =('00'+ todaySet.getDate()).slice(-2);
-//   let today = YYYY + '-' + MM + '-' + DD;
-//   return today;
-// }
 </script>
-
-
-<!-- <template>
-  <div class="post">
-      <v-card class="mx-auto mt-5" width="800px">
-      <v-card-title>
-        <h1>新規タスク作成</h1>
-      </v-card-title>
-      <v-card-text>
-        <v-form ref="form">
-          <v-text-field label="タスク名" v-model="taskData.name" :rules="nameRules"/>
-          <v-textarea label="内容" v-model="taskData.content" :rules="contentRules"></v-textarea>
-          <v-text-field label="期日" v-model="taskData.limit" type="date" :rules="limitRules"/>
-          <v-select  v-model="taskData.priority" label="優先度" :items="priorityItems"></v-select>
-          <label for="priority">1:高 2:中 3:低</label>
-          <v-select  v-model="taskData.status" label="ステータス" :items="statusItems"></v-select>
-          <label for="priority">1:未着手 2:未完了 3:完了</label>
-          <v-row class="justify-center mt-3">
-            <label for="progress" class="mt-3">進行度</label>
-            <progress id="progress" max="100" v-bind:value="progressCounter" class="mt-3"></progress>
-            <v-text-field label="進行度(%)" v-model="taskData.progress"/>
-          </v-row>
-          <v-row class="justify-center mb-3">
-            <v-btn @click="postTask" class="mr-4" color="secondary">タスク登録</v-btn>
-            <v-btn @click="ReturnListTodo" class="mr-4" color="secondary">一覧に戻る</v-btn>
-          </v-row>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </div>
-</template> -->
 
 
 <template>
