@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 import axios, { type AxiosResponse } from "axios";
 import { useRouter } from "vue-router";
 import moment from "moment";
+import { filterByName } from "@/stores/filterTodos";
 
 const router =useRouter();
 const authStore = useAuthStore();
@@ -67,18 +68,7 @@ const searchPriority = ref("");
 const searchStatus = ref("");
 
 const searchTodoName = computed(()=>{
-  let todos:any =[];
-  for(let i in index.todos){
-    let todo = index.todos[i];
-    if(searchName.value !== ""){
-      if((todo.name.indexOf(searchName.value) !== -1)){
-        todos.push(todo);
-      }
-    }else{
-      return index.todos;
-    }
-  }
-  return todos;
+  return filterByName(index.todos, searchName.value);
 });
 
 
