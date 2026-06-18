@@ -4,11 +4,13 @@ import { useAuthStore } from "@/stores/auth";
 import axios, { type AxiosResponse } from "axios";
 import { useRouter } from "vue-router";
 import moment from "moment";
-import { filterByName } from "@/stores/filterTodos";
+import { filterByName, type Todo} from "@/stores/filterTodos";
+
+
 
 const router =useRouter();
 const authStore = useAuthStore();
-const index:any = reactive({
+const index = reactive<{ todos: Todo[] }>({
   todos: [],
 });
 const prioritySelectChoise =["","高","中","低"];
