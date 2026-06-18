@@ -5,6 +5,8 @@ import { useFlashMessageStore } from "@/stores/flash-message";
 import IST from "@/assets/IST.png";
 
 
+
+
 const messageStore = useFlashMessageStore();
 
 const authStore=useAuthStore();
@@ -30,8 +32,7 @@ const onLogout = (): void => {
     <v-app>
       <header>
     <ul class="title">
-      <h1>IST</h1>
-      <!-- <v-img :src="IST" height="60px"></v-img> -->
+      <v-img :src="IST" width="150" height="150"></v-img>
     </ul>
     <ul>
       <template v-if="authStore.client == null">
@@ -70,15 +71,24 @@ const onLogout = (): void => {
 .title{
   float:left;
   padding-left:20px;
+  height:70px;            /* ヘッダーと同じ高さにする */
+  display:flex;           /* 中身を flツクスボックスで並べる */
+  align-items:center;     /* 縦方向の中央に揃える */
 }
 
 header {
   background-color: #47b0dc;
   max-height: 100%;
   width: 100%;
-  height:50px;
+  height:70px;
   top:0;
+  position: fixed;   /* 画面に固定する */
+  top: 0;            /* 上端に貼り付ける */
+  left: 0;           /* 左端に貼り付ける */
+  z-index: 100;      /* 他の要素より手前に表示する */
 }
+
+
 .footer {
   background-color: aqua;
   width: 100%;
@@ -101,7 +111,9 @@ ul li {
 main{
   
 }
-
+.v-main {
+  padding-top: 70px;
+}
 
 *{
   margin:0;

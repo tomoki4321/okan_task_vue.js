@@ -63,7 +63,7 @@ const onSignup = async (): Promise<void> => {
 <style scoped>
 .sinup{
   margin:auto;
-  padding-top:80px;
+  padding-top:20px;
 }
 h1{
   text-align: center;

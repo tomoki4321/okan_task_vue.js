@@ -164,7 +164,8 @@ const labelPossible = computed(()=>{
 
 <style scoped>
 .edit{
-  padding-top:80px;
+  padding-top:10px;
+  padding-bottom:10px;
 }
 h1{
   text-align: center;

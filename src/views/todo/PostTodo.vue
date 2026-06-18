@@ -108,7 +108,8 @@ const ReturnListTodo = ():void=> {
 
 <style scoped>
 .post{
-  padding-top:80px;
+  padding-top:10px;
+  padding-bottom:10px;
 }
 h1{
   text-align: center;
