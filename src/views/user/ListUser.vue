@@ -72,7 +72,7 @@ const avatarColor = (name?: string) => {
       v-for="user in index.users"
       :key="user.id"
       rounded="xl"
-      variant="outlined"
+      elevation="3"
       class="mb-3 pa-3"
     >
       <div style="display: flex; align-items: center; gap: 16px;">

@@ -79,7 +79,7 @@ const ReturnListUser = ():void=> {
 
 <template>
   <div style="max-width: 560px; margin: 0 auto; padding: 32px 16px;">
-    <v-card rounded="xl" variant="outlined" class="pa-2">
+    <v-card rounded="xl" elevation="3" class="pa-2">
       <v-card-title>
         <div style="display: flex; align-items: center; gap: 16px; padding-top: 8px;">
           <v-avatar rounded="lg" color="blue-lighten-4" size="40" style="flex-shrink: 0;">
