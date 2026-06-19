@@ -13,8 +13,7 @@ const authStore = useAuthStore();
 const index = reactive<{ todos: Todo[] }>({
   todos: [],
 });
-const prioritySelectChoise =["","高","中","低"];
-const statusSelectChoise =["","未着手","未完了","完了"];
+
 TodoListUp();
 async function TodoListUp(): Promise<void> {
   await axios
@@ -51,47 +50,93 @@ const changeDate = (date:any) => {
   return moment(date).format("YYYY年MM月DD日");
 };
 
-const resetName = ()=>{
-  return searchName.value = "";
-};
-
-const resetPriority = ()=>{
-  return searchPriority.value = "";
-};
-
-const resetStatus = ()=>{
-  return searchStatus.value = "";
-};
-
-
-
-const searchName =ref("");
+// 検索条件
+const searchName = ref("");
 const searchPriority = ref("");
 const searchStatus = ref("");
+const resetName = () => (searchName.value = "");
+const resetPriority = () => (searchPriority.value = "");
+const resetStatus = () => (searchStatus.value = "");
+const prioritySelectChoise = ["", "高", "中", "低"];
+const statusSelectChoise = ["", "未着手", "未完了", "完了"];
 
-// 表示するタスクを1つのcomputedに集約
-const displayTodos = computed<Todo[]>(() => {
+// ① 並び替え
+const sortOrder = ref("created");
+const sortOptions = [
+  { value: "created", title: "登録順" },
+  { value: "limit_asc", title: "期限が近い順" },
+  { value: "priority", title: "優先度が高い順" },
+];
+
+// ② 期限切れ判定（今日より前 かつ 完了以外）
+const isOverdue = (todo: Todo) => {
+  // 期限があって完了以外のタスクのみ通す
+  if (!todo.limit || todo.status === 3) return false;
+  // 今日より前か
+  return moment(todo.limit).isBefore(moment(), "day");
+};
+
+// ③ 完了タスクのタブ分け（open:未完了 done:完了）
+const activeTab = ref("open"); 
+
+// 名前→優先度→ステータスの順で絞り込み
+const filteredTodos = computed(() => {
   if (searchName.value !== "") {
     return filterByName(index.todos, searchName.value);
   }
   if (searchPriority.value !== "") {
-    const map: Record<string, number> = { 高: 1, 中: 2, 低: 3 };
+    const map: any = { 高: 1, 中: 2, 低: 3 };
     return index.todos.filter((t) => t.priority === map[searchPriority.value]);
   }
   if (searchStatus.value !== "") {
-    const map: Record<string, number> = { 未着手: 1, 未完了: 2, 完了: 3 };
+    const map: any = { 未着手: 1, 未完了: 2, 完了: 3 };
     return index.todos.filter((t) => t.status === map[searchStatus.value]);
   }
   return index.todos;
 });
 
-// 表示用ラベル・色マッピング
+// タブで未完了／完了をさらに絞り込み
+const tabFilteredTodos = computed(() => {
+  if (activeTab.value === "done") {
+    return filteredTodos.value.filter((t) => t.status === 3);
+  }
+  return filteredTodos.value.filter((t) => t.status !== 3);
+});
+
+// 並び替えを適用した最終表示リスト
+const displayTodos = computed(() => {
+  // 並び替え用の配列に元配列をコピー
+  const todos = [...tabFilteredTodos.value];
+  // 期限が近い順のときaとbを比べてどちらが先か
+  if (sortOrder.value === "limit_asc") {
+    todos.sort((a, b) => moment(a.limit).valueOf() - moment(b.limit).valueOf());
+  // 優先度順のときaとbを比べてどちらが先か
+  } else if (sortOrder.value === "priority") {
+    todos.sort((a, b) => (a.priority ?? 9) - (b.priority ?? 9));
+  }
+  return todos;
+});
+
+// ④ 今週の締切まとめ（今日〜7日以内、完了以外）
+const upcomingTodos = computed(() => {
+  const today = moment().startOf("day");
+  const weekLater = moment().add(7, "days").endOf("day");
+  return index.todos
+    .filter((t) => t.status !== 3 && t.limit)
+    .filter((t) => {
+      const d = moment(t.limit);
+      // 今日から１週間以内のタスク
+      return d.isSameOrAfter(today) && d.isSameOrBefore(weekLater);
+    })
+    // 並べ替え
+    .sort((a, b) => moment(a.limit).valueOf() - moment(b.limit).valueOf());
+});
+
 const priorityLabel = (p?: number) => (p === 1 ? "高" : p === 2 ? "中" : "低");
 const priorityColor = (p?: number) => (p === 1 ? "red" : p === 2 ? "indigo" : "green");
 const statusLabel = (s?: number) => (s === 1 ? "未着手" : s === 2 ? "未完了" : "完了");
 const statusColor = (s?: number) => (s === 1 ? "blue-grey" : s === 2 ? "amber" : "teal");
 const progressColor = (p?: number) => ((p ?? 0) >= 100 ? "teal" : "blue");
-
 </script>
 
 <template>
@@ -145,6 +190,25 @@ const progressColor = (p?: number) => ((p ?? 0) >= 100 ? "teal" : "blue");
       </v-card-text>
     </v-card>
 
+    <!-- ④ 今週の締切まとめ -->
+    <v-card v-if="upcomingTodos.length > 0" rounded="xl" variant="tonal" color="amber" class="pa-2 mb-6">
+      <v-card-title>
+        <div style="display: flex; align-items: center; gap: 16px; padding-top: 8px;">
+          <v-icon icon="mdi-calendar-alert" color="amber-darken-3" />
+          <span class="text-subtitle-1">今週の締切</span>
+        </div>
+      </v-card-title>
+      <v-card-text class="pt-0">
+        <div
+          v-for="todo in upcomingTodos"
+          :key="todo.id"
+          style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0;"
+        >
+          <span class="text-body-2">{{ todo.name }}</span>
+          <span class="text-caption font-weight-medium">{{ changeDate(todo.limit) }}</span>
+        </div>
+      </v-card-text>
+    </v-card>
     <!-- 一覧ヘッダー -->
     <div class="d-flex align-center justify-space-between mb-4 flex-wrap" style="gap: 8px;">
       <div style="display: flex; align-items: center; gap: 16px;">
@@ -159,15 +223,37 @@ const progressColor = (p?: number) => ((p ?? 0) >= 100 ? "teal" : "blue");
       <v-btn rounded="pill" color="blue-darken-2" prepend-icon="mdi-plus" :to="{ name: 'post' }">新規タスク</v-btn>
     </div>
 
+    <!-- ③ タブ：未完了／完了 -->
+    <v-tabs v-model="activeTab" color="blue-darken-2" class="mb-4">
+      <v-tab value="open">未完了</v-tab>
+      <v-tab value="done">完了</v-tab>
+    </v-tabs>
+
+    <!-- ① 並び替え -->
+    <v-select
+      v-model="sortOrder"
+      :items="sortOptions"
+      item-title="title"
+      item-value="value"
+      label="並び順"
+      variant="outlined"
+      :rounded="'xl'"
+      density="compact"
+      hide-details
+      style="max-width: 220px; margin-bottom: 16px;"
+    />
+
     <!-- タスクカード -->
     <v-card
       v-for="todo in displayTodos"
       :key="todo.id"
       rounded="xl"
-      variant="outlined"
-      class="mb-3 pa-3"
+      :variant="isOverdue(todo) ? 'tonal' : 'outlined'"
+      :color="isOverdue(todo) ? 'red' : undefined"
+      :class="['mb-3 pa-3', isOverdue(todo) ? 'overdue-card' : '']"
     >
       <div style="display: flex; align-items: center; gap: 12px;">
+        <v-icon v-if="isOverdue(todo)" icon="mdi-alert-circle" color="red" size="20" style="flex-shrink: 0;" />
         <span style="flex: 1 1 0; min-width: 0;" class="text-subtitle-1 text-truncate">
           {{ todo.name }}
         </span>
@@ -194,12 +280,24 @@ const progressColor = (p?: number) => ((p ?? 0) >= 100 ? "teal" : "blue");
       />
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
         <span class="text-body-2 text-medium-emphasis">進捗 {{ todo.progress || 0 }}%</span>
-        <span class="text-body-2 text-medium-emphasis d-inline-flex align-center" style="gap: 4px;">
+        <span
+          class="text-body-2 d-inline-flex align-center"
+          :class="isOverdue(todo) ? 'text-red font-weight-bold' : 'text-medium-emphasis'"
+          style="gap: 4px;"
+        >
           <v-icon icon="mdi-calendar" size="16" />{{ changeDate(todo.limit) }}
         </span>
       </div>
     </v-card>
+
+    <div v-if="displayTodos.length === 0" class="text-center text-medium-emphasis py-8">
+      タスクがありません
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.overdue-card {
+  border: 1.5px solid rgba(211, 47, 47, 0.4);
+}
+</style>
