@@ -1,8 +1,15 @@
 // タスクの型
-type Todo = {
+export type Todo = {
+  id: number;
   name: string;
+  content: string;
   priority: number;
   status: number;
+  progress: number;
+  limit: string;
+  created_at: string;
+  updated_at?: string;
+  user_id?: number;
 };
 
 // 名前で絞り込む

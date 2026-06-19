@@ -1,19 +1,25 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { RouterLink,RouterView,useRouter } from 'vue-router';
+import { useDisplay } from "vuetify";
 import { useAuthStore } from './stores/auth';
 import { useFlashMessageStore } from "@/stores/flash-message";
 import IST from "@/assets/IST.png";
 
 
-
-
 const messageStore = useFlashMessageStore();
 
 const authStore=useAuthStore();
+
 const router = useRouter();
-const onLogout = (): void => {
-  const authStore = useAuthStore();
-  authStore.logout();
+
+// 画面幅でモバイル判定（ハンバーガー表示の切替）
+const { mobile } = useDisplay();
+// モバイル用ドロワーの開閉
+const drawer = ref(false);
+
+const onLogout = async():Promise<void> => {
+  await authStore.logout();
   localStorage.removeItem("access-token");
   localStorage.removeItem("uid");
   localStorage.removeItem("client");
@@ -21,101 +27,104 @@ const onLogout = (): void => {
   router.push({ name: "top" });
   messageStore.flash("ログアウトしました！");
 };
-
-
-// !authStore.isAuthencated()
-
 </script>
 
-
 <template>
-    <v-app>
-      <header>
-    <ul class="title">
-      <v-img :src="IST" width="150" height="150"></v-img>
-    </ul>
-    <ul>
-      <template v-if="authStore.client == null">
-        <li><RouterLink to="/sinup">新規登録</RouterLink></li>
-        <li><RouterLink to="/login">ログイン</RouterLink></li>
-        <li><RouterLink to="/">TOP</RouterLink></li>
+  <v-app>
+    <!-- ヘッダー：白地＋下に薄い境界線 -->
+    <v-app-bar flat color="white" border="b" height="68">
+      <!-- モバイル時だけハンバーガー -->
+      <v-app-bar-nav-icon
+        v-if="mobile"
+        @click="drawer = !drawer"
+        color="blue-darken-2"
+      />
+
+      <!-- ロゴ（クリックでトップへ） -->
+      <RouterLink to="/" class="d-flex align-center ml-2" style="text-decoration: none;">
+        <v-img :src="IST" width="96" height="48" alt="IST ロゴ" />
+      </RouterLink>
+
+      <v-spacer />
+
+      <!-- PC時だけ横並びナビ -->
+      <template v-if="!mobile">
+        <template v-if="authStore.client == null">
+          <v-btn to="/sinup" variant="text" color="blue-darken-2" class="text-blue-darken-2">新規登録</v-btn>
+          <v-btn to="/login" variant="text" color="blue-darken-2" class="text-blue-darken-2">ログイン</v-btn>
+          <v-btn to="/" variant="text" color="blue-darken-2" class="text-blue-darken-2">TOP</v-btn>
+        </template>
+        <template v-else>
+          <v-btn to="/todo/post" variant="text" color="blue-darken-2" class="text-blue-darken-2">新規タスク作成</v-btn>
+          <v-btn to="/todo/index" variant="text" color="blue-darken-2" class="text-blue-darken-2">タスク一覧</v-btn>
+          <v-btn
+            v-if="authStore.admin !== null"
+            to="/user/index"
+            variant="text"
+            color="blue-darken-2"
+            class="text-blue-darken-2"
+          >ユーザー一覧</v-btn>
+          <v-btn
+            @click="onLogout"
+            rounded="pill"
+            color="blue-darken-2"
+            variant="flat"
+            class="ml-2"
+          >ログアウト</v-btn>
+        </template>
       </template>
-      <template v-else>
-        <li><RouterLink to="/todo/post">新規タスク作成</RouterLink></li>
-        <li><RouterLink to="/todo/index">タスク一覧</RouterLink></li>
-        <li><a href="" @click="onLogout">ログアウト</a></li>
-        <li v-if="authStore.admin !== null"><RouterLink to="/user/index">ユーザー一覧</RouterLink></li>
-      </template>
-    </ul>
-  </header>
-  <v-main>
-    {{ messageStore.text }}
-    <RouterView/>
-  </v-main>
-      <v-footer class="footer" >
-        <v-row justify="center">
-          <v-col class="text-center" cols="12">
-            <p>
-              &copy; 2023 IST
-            </p>
-          </v-col>
-        </v-row>
-      </v-footer>
-    </v-app>
+    </v-app-bar>
+
+    <!-- モバイル用ドロワー -->
+    <v-navigation-drawer v-model="drawer" temporary location="left">
+      <v-list>
+        <template v-if="authStore.client == null">
+          <v-list-item to="/sinup" prepend-icon="mdi-account-plus" title="新規登録" />
+          <v-list-item to="/login" prepend-icon="mdi-login-variant" title="ログイン" />
+          <v-list-item to="/" prepend-icon="mdi-home" title="TOP" />
+        </template>
+        <template v-else>
+          <v-list-item to="/todo/post" prepend-icon="mdi-plus-box-outline" title="新規タスク作成" />
+          <v-list-item to="/todo/index" prepend-icon="mdi-format-list-checks" title="タスク一覧" />
+          <v-list-item
+            v-if="authStore.admin !== null"
+            to="/user/index"
+            prepend-icon="mdi-account-group"
+            title="ユーザー一覧"
+          />
+          <v-divider class="my-2" />
+          <v-list-item @click="onLogout" prepend-icon="mdi-logout" title="ログアウト" base-color="blue-darken-2" />
+        </template>
+      </v-list>
+    </v-navigation-drawer>
+    <!-- 本体 -->
+    <v-main class="app-main">
+      <!-- フラッシュメッセージ -->
+      <v-slide-y-transition>
+        <v-alert
+          v-if="messageStore.text"
+          type="info"
+          variant="tonal"
+          rounded="lg"
+          class="ma-4"
+        >{{ messageStore.text }}</v-alert>
+      </v-slide-y-transition>
+      <RouterView />
+    </v-main>
+
+    <!-- フッター：白地＋上に薄い境界線 -->
+    <v-footer color="white" border="t" class="d-flex justify-center py-4">
+      <span class="text-caption text-medium-emphasis d-inline-flex align-center" style="gap: 6px;">
+        <v-icon icon="mdi-eye-check-outline" size="16" color="blue-darken-2" />
+        © 2023 IST
+      </span>
+    </v-footer>
+  </v-app>
 </template>
 
-
-
 <style scoped>
-
-.title{
-  float:left;
-  padding-left:20px;
-  height:70px;            /* ヘッダーと同じ高さにする */
-  display:flex;           /* 中身を flツクスボックスで並べる */
-  align-items:center;     /* 縦方向の中央に揃える */
-}
-
-header {
-  background-color: #47b0dc;
-  max-height: 100%;
-  width: 100%;
-  height:70px;
-  top:0;
-  position: fixed;   /* 画面に固定する */
-  top: 0;            /* 上端に貼り付ける */
-  left: 0;           /* 左端に貼り付ける */
-  z-index: 100;      /* 他の要素より手前に表示する */
-}
-
-
-.footer {
-  background-color: aqua;
-  width: 100%;
-  max-height:80px;
-  bottom: 0;
-}
-
-
-ul {
-  margin: 0;
-  padding: 0;
-  float:right;
-}
-
-ul li {
-  list-style: none;
-  float:left;
-  padding: 20px;
-}
-main{
-  
-}
-.v-main {
-  padding-top: 70px;
-}
-
-*{
-  margin:0;
+.app-main {
+  background-color: #e9eaec;
+  min-height: calc(100vh - 68px);
 }
 </style>

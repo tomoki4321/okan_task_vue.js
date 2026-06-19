@@ -12,13 +12,21 @@ const props = defineProps<Props>();
 const authStore =useAuthStore();
 const messageStore = useFlashMessageStore();
 const router = useRouter();
+
+ReceiveUser();
+
+// 変更可能な項目
 const userData = reactive({
   name: "",
   email: "",
   password: "",
 });
-ReceiveUser();
 
+// 表示専用（変更不可）
+const userAdmin = ref(false);
+
+// パスワードの表示・非表示
+const showPassword = ref(false);
 
 async function ReceiveUser(): Promise<void> {
   await axios
@@ -30,8 +38,9 @@ async function ReceiveUser(): Promise<void> {
       },
     })
     .then((response: AxiosResponse<any>) => {
-      userData.name=response.data.user.name,
-      userData.email=response.data.user.email,
+      userData.name=response.data.user.name;
+      userData.email=response.data.user.email;
+      userAdmin.value = response.data.user.admin;
       console.log(response.data);
     });
 }
@@ -68,34 +77,72 @@ const ReturnListUser = ():void=> {
 };
 </script>
 
-
 <template>
-  <div class="edit">
-      <v-card class="mx-auto mt-5" width="800px">
+  <div style="max-width: 560px; margin: 0 auto; padding: 32px 16px;">
+    <v-card rounded="xl" variant="outlined" class="pa-2">
       <v-card-title>
-        <h1>ユーザー編集</h1>
+        <div style="display: flex; align-items: center; gap: 16px; padding-top: 8px;">
+          <v-avatar rounded="lg" color="blue-lighten-4" size="40" style="flex-shrink: 0;">
+            <v-icon icon="mdi-account-edit" color="blue-darken-2" />
+          </v-avatar>
+          <span class="text-h6">ユーザー編集</span>
+        </div>
       </v-card-title>
       <v-card-text>
-        <v-form>
-          <v-text-field label="ユーザー名" v-model="userData.name"/>
-          <v-text-field label="メールアドレス" v-model="userData.email"/>
-          <v-text-field label="パスワード" v-model="userData.password" placeholder="******************"/>
-          <v-row class="justify-center mb-3">
-            <v-btn @click="UpdateUser" class="mr-4" color="secondary">更新</v-btn>
-            <v-btn @click="ReturnListUser" class="mr-4" color="secondary">一覧に戻る</v-btn>
-          </v-row>
-        </v-form>
+        <!-- 権限（表示専用） -->
+        <div class="d-flex align-center mb-4" style="gap: 8px;">
+          <span class="text-body-2 text-medium-emphasis">権限</span>
+          <v-chip :color="userAdmin ? 'amber' : 'blue-grey'" size="small" variant="tonal" label>
+            {{ userAdmin ? "管理者" : "一般" }}
+          </v-chip>
+        </div>
+
+        <!-- 名前 -->
+        <v-text-field
+          v-model="userData.name"
+          label="名前"
+          variant="outlined"
+          :rounded="'xl'"
+          class="mb-3"
+        />
+
+        <!-- メールアドレス -->
+        <v-text-field
+          v-model="userData.email"
+          label="メールアドレス"
+          type="email"
+          variant="outlined"
+          :rounded="'xl'"
+          class="mb-3"
+        />
+
+        <!-- 区切り -->
+        <div style="border-top: 1px solid rgba(0,0,0,0.08); margin: 8px 0 20px;"></div>
+        <div class="text-body-2 text-medium-emphasis mb-3">
+          パスワードを変更する場合は入力してください
+        </div>
+
+        <!-- パスワード（目アイコンで表示切替） -->
+        <v-text-field
+          v-model="userData.password"
+          label="新しいパスワード"
+          :type="showPassword ? 'text' : 'password'"
+          :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+          @click:append-inner="showPassword = !showPassword"
+          variant="outlined"
+          :rounded="'xl'"
+          class="mb-6"
+        />
+
+        <!-- ボタン -->
+        <div style="display: flex; justify-content: center; gap: 20px;">
+          <v-btn @click="UpdateUser" rounded="pill" color="blue-darken-2" size="large" style="flex: 1 1 0;">更新する</v-btn>
+          <v-btn @click="ReturnListUser" rounded="pill" variant="outlined" color="blue-darken-2" size="large" style="flex: 1 1 0;">戻る</v-btn>
+        </div>
       </v-card-text>
     </v-card>
   </div>
 </template>
 
-<style scoped>
-.edit{
-  padding-top:80px;
-}
-h1{
-  text-align: center;
-  padding-bottom: 20px;
-}
-</style>
+<style scoped></style>
+

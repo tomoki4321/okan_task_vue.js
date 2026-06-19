@@ -78,10 +78,10 @@ export const useAuthStore = defineStore({
           client: this.client,
         },
       });
-      this.access_token = "";
-      this.client = "";
-      this.uid = "";
-      this.admin = "";
+      this.access_token = null;
+      this.client = null;
+      this.uid = null;
+      this.admin = null;
       localStorage.removeItem("access-token");
       localStorage.removeItem("uid");
       localStorage.removeItem("client");

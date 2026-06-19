@@ -3,9 +3,9 @@ import { filterByName, filterByPriority } from "@/stores/filterTodos";
 
 // テスト用のダミーデータ
 const todos = [
-  { name: "買い物", priority: 1, status: 2 },
-  { name: "買い出し", priority: 2, status: 1 },
-  { name: "勉強", priority: 3, status: 3 },
+  { id: 1, name: "買い物", content: "", priority: 1, status: 2, progress: 0, limit: "2025-01-01", created_at: "2025-01-01" },
+  { id: 2, name: "買い出し", content: "", priority: 2, status: 1, progress: 0, limit: "2025-01-01", created_at: "2025-01-01" },
+  { id: 3, name: "勉強", content: "", priority: 3, status: 3, progress: 0, limit: "2025-01-01", created_at: "2025-01-01" },
 ];
 
 describe("filterByName", () => {
