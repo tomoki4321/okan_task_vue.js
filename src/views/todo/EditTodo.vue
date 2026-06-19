@@ -261,9 +261,9 @@ const labelPossible = computed(()=>{
             </div>
           </div>
 
-          <div style="display: flex; justify-content: center; gap: 20px;">
-            <v-btn @click="UpdateTask" rounded="pill" color="blue-darken-2" size="large" style="min-width: 280px;">タスク更新</v-btn>
-            <v-btn @click="ReturnListTodo" rounded="pill" variant="outlined" color="blue-darken-2" size="large">戻る</v-btn>
+          <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <v-btn @click="UpdateTask" rounded="pill" color="blue-darken-2" size="large" style="flex: 1 1 220px; min-width: 0;">更新する</v-btn>
+            <v-btn @click="ReturnListTodo" rounded="pill" variant="outlined" color="blue-darken-2" size="large" style="flex: 1 1 120px; min-width: 0;">戻る</v-btn>
           </div>
         </v-form>
       </v-card-text>

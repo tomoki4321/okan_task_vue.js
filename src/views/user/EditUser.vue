@@ -136,8 +136,8 @@ const ReturnListUser = ():void=> {
 
         <!-- ボタン -->
         <div style="display: flex; justify-content: center; gap: 20px;">
-          <v-btn @click="ReturnListUser" rounded="pill" variant="outlined" color="blue-darken-2" size="large" style="flex: 1 1 0;">戻る</v-btn>
           <v-btn @click="UpdateUser" rounded="pill" color="blue-darken-2" size="large" style="flex: 1 1 0;">更新する</v-btn>
+          <v-btn @click="ReturnListUser" rounded="pill" variant="outlined" color="blue-darken-2" size="large" style="flex: 1 1 0;">戻る</v-btn>
         </div>
       </v-card-text>
     </v-card>

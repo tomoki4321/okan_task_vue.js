@@ -145,13 +145,12 @@ const progressColor = (p?: number) => ((p ?? 0) >= 100 ? "teal" : "blue");
           <v-btn
             :to="{ name: 'edit', params: { id: props.id } }"
             rounded="pill"
-            variant="outlined"
             color="blue-darken-2"
             size="large"
             prepend-icon="mdi-pencil"
             style="flex: 1 1 0;"
           >編集する</v-btn>
-          <v-btn @click="ReturnListTodo" rounded="pill" color="blue-darken-2" size="large" style="flex: 1 1 0;">一覧に戻る</v-btn>
+          <v-btn @click="ReturnListTodo" rounded="pill" variant="outlined" color="blue-darken-2" size="large" style="flex: 1 1 0;">一覧に戻る</v-btn>
         </div>
       </v-card-text>
     </v-card>
