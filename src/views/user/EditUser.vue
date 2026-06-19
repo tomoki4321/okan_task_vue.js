@@ -80,22 +80,19 @@ const ReturnListUser = ():void=> {
 <template>
   <div style="max-width: 560px; margin: 0 auto; padding: 32px 16px;">
     <v-card rounded="xl" variant="outlined" class="pa-2">
-      <v-card-title class="d-flex align-center ga-3 pt-4">
-        <v-avatar rounded="lg" color="blue-lighten-4" size="40">
-          <v-icon icon="mdi-account-edit" color="blue-darken-2" />
-        </v-avatar>
-        <span class="text-h6">ユーザー編集</span>
+      <v-card-title>
+        <div style="display: flex; align-items: center; gap: 16px; padding-top: 8px;">
+          <v-avatar rounded="lg" color="blue-lighten-4" size="40" style="flex-shrink: 0;">
+            <v-icon icon="mdi-account-edit" color="blue-darken-2" />
+          </v-avatar>
+          <span class="text-h6">ユーザー編集</span>
+        </div>
       </v-card-title>
       <v-card-text>
         <!-- 権限（表示専用） -->
-        <div class="d-flex align-center ga-2 mb-4">
+        <div class="d-flex align-center mb-4" style="gap: 8px;">
           <span class="text-body-2 text-medium-emphasis">権限</span>
-          <v-chip
-            :color="userAdmin ? 'amber' : 'blue-grey'"
-            size="small"
-            variant="tonal"
-            label
-          >
+          <v-chip :color="userAdmin ? 'amber' : 'blue-grey'" size="small" variant="tonal" label>
             {{ userAdmin ? "管理者" : "一般" }}
           </v-chip>
         </div>
@@ -139,21 +136,8 @@ const ReturnListUser = ():void=> {
 
         <!-- ボタン -->
         <div style="display: flex; justify-content: center; gap: 20px;">
-          <v-btn
-            @click="ReturnListUser"
-            rounded="pill"
-            variant="outlined"
-            color="blue-darken-2"
-            size="large"
-            style="flex: 1 1 0;"
-          >戻る</v-btn>
-          <v-btn
-            @click="UpdateUser"
-            rounded="pill"
-            color="blue-darken-2"
-            size="large"
-            style="flex: 1 1 0;"
-          >更新する</v-btn>
+          <v-btn @click="ReturnListUser" rounded="pill" variant="outlined" color="blue-darken-2" size="large" style="flex: 1 1 0;">戻る</v-btn>
+          <v-btn @click="UpdateUser" rounded="pill" color="blue-darken-2" size="large" style="flex: 1 1 0;">更新する</v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -161,3 +145,4 @@ const ReturnListUser = ():void=> {
 </template>
 
 <style scoped></style>
+
