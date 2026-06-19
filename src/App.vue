@@ -98,7 +98,7 @@ const onLogout = async():Promise<void> => {
       </v-list>
     </v-navigation-drawer>
     <!-- 本体 -->
-    <v-main>
+    <v-main class="app-main">
       <!-- フラッシュメッセージ -->
       <v-slide-y-transition>
         <v-alert
@@ -122,4 +122,9 @@ const onLogout = async():Promise<void> => {
   </v-app>
 </template>
 
-<style scoped></style>
+<style scoped>
+.app-main {
+  background-color: #e9eaec;
+  min-height: calc(100vh - 68px);
+}
+</style>
