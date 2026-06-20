@@ -4,7 +4,7 @@ import axios,{type AxiosResponse} from 'axios';
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from 'vue-router';
 import { useFlashMessageStore } from "@/stores/flash-message";
-import { nameRules, contentRules, limitRules } from "@/stores/validationRules";
+import { nameRules, contentRules, limitRules, progressRules } from "@/stores/validationRules";
 
 interface Props {
   id: number;
@@ -148,7 +148,7 @@ const labelPossible = computed(()=>{
 
 <template>
   <div style="max-width: 640px; margin: 0 auto; padding: 32px 16px;">
-    <v-card rounded="xl" variant="outlined" class="pa-2">
+    <v-card rounded="xl" elevation="3" class="pa-2">
       <v-card-title>
         <div style="display: flex; align-items: center; gap: 16px; padding-top: 8px;">
           <v-avatar rounded="lg" color="blue-lighten-4" size="40" style="flex-shrink: 0;">
@@ -224,12 +224,14 @@ const labelPossible = computed(()=>{
 
           <v-text-field
             v-model="taskData.progress"
+            :rules="progressRules"
             label="進行度(%)"
             type="number"
+            min="0"
+            max="100"
             variant="outlined"
             :rounded="'xl'"
-            hide-details
-            class="mb-4"
+            class="mb-3"
           />
 
           <!-- カテゴリ追加（未追加時のみ） -->

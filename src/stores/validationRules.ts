@@ -35,3 +35,9 @@ export const passwordRules = [
 export const requiredRule = [
   (v: string) => !!v || "入力してください",
 ];
+
+// 進行度のバリデーション（0〜100の範囲のみ許可）
+export const progressRules = [
+  (v: any) => v !== null && v !== "" || "進行度を入力してください",
+  (v: any) => (Number(v) >= 0 && Number(v) <= 100) || "進行度は0〜100の範囲で入力してください",
+];

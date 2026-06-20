@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from 'vue-router';
 import { useFlashMessageStore } from "@/stores/flash-message";
-import { nameRules, contentRules, limitRules } from "@/stores/validationRules";
+import { nameRules, contentRules, limitRules, progressRules } from "@/stores/validationRules";
 
 const authStore =useAuthStore();
 const router = useRouter();
@@ -41,6 +41,8 @@ const progressColor = (p?: number) => ((p ?? 0) >= 100 ? "teal" : "blue");
 
 //バリデーション
 const form = ref();
+
+
 
 async function postTask(): Promise<void> {
   // フォーム全体のバリデーションを実行
@@ -86,7 +88,7 @@ const ReturnListTodo = ():void=> {
 
 <template>
   <div style="max-width: 640px; margin: 0 auto; padding: 32px 16px;">
-    <v-card rounded="xl" variant="outlined" class="pa-2">
+    <v-card rounded="xl" elevation="3" class="pa-2">
       <v-card-title>
         <div style="display: flex; align-items: center; gap: 16px; padding-top: 8px;">
           <v-avatar rounded="lg" color="blue-lighten-4" size="40" style="flex-shrink: 0;">
@@ -164,12 +166,14 @@ const ReturnListTodo = ():void=> {
 
           <v-text-field
             v-model="taskData.progress"
+            :rules="progressRules"
             label="進行度(%)"
             type="number"
+            min="0"
+            max="100"
             variant="outlined"
             :rounded="'xl'"
-            hide-details
-            class="mb-6"
+            class="mb-3"
           />
 
           <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
