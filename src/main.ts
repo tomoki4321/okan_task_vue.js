@@ -9,6 +9,23 @@ import { aliases, mdi } from "vuetify/iconsets/mdi";
 
 
 const vuetify = createVuetify({
+  theme: {
+    defaultTheme: localStorage.getItem("theme") || "light",
+    themes: {
+      light: {
+        dark: false,
+        colors: {
+          background: "#e9eaec",
+        },
+      },
+      dark: {
+        dark: true,
+        colors: {
+          background: "#121212",
+        },
+      },
+    },
+  },
   icons: {
     defaultSet: "mdi",
     aliases,

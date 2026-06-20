@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterLink,RouterView,useRouter } from 'vue-router';
-import { useDisplay } from "vuetify";
+import { useDisplay, useTheme } from "vuetify";
 import { useAuthStore } from './stores/auth';
 import { useFlashMessageStore } from "@/stores/flash-message";
 import IST from "@/assets/IST.png";
@@ -17,6 +17,14 @@ const router = useRouter();
 const { mobile } = useDisplay();
 // モバイル用ドロワーの開閉
 const drawer = ref(false);
+
+// ダークモード切り替え
+const theme = useTheme();
+const isDark = ref(theme.global.name.value === "dark");
+const toggleTheme = () => {
+  theme.global.name.value = isDark.value ? "dark" : "light";
+  localStorage.setItem("theme", theme.global.name.value);
+};
 
 const onLogout = async():Promise<void> => {
   await authStore.logout();
@@ -46,6 +54,21 @@ const onLogout = async():Promise<void> => {
       </RouterLink>
 
       <v-spacer />
+
+      <!-- ダークモードスイッチ -->
+      <v-switch
+        v-model="isDark"
+        @change="toggleTheme"
+        hide-details
+        color="blue-darken-2"
+        density="compact"
+        class="mr-2"
+        style="flex-grow: 0;"
+      >
+        <template v-slot:prepend>
+          <v-icon :icon="isDark ? 'mdi-weather-night' : 'mdi-weather-sunny'" size="20" />
+        </template>
+      </v-switch>
 
       <!-- PC時だけ横並びナビ -->
       <template v-if="!mobile">
@@ -124,7 +147,6 @@ const onLogout = async():Promise<void> => {
 
 <style scoped>
 .app-main {
-  background-color: #e9eaec;
   min-height: calc(100vh - 68px);
 }
 </style>
