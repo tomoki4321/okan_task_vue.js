@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive,computed,ref } from "vue";
+import { reactive,computed,ref, watch } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import axios, { type AxiosResponse } from "axios";
 import { useRouter } from "vue-router";
@@ -76,7 +76,13 @@ const isOverdue = (todo: Todo) => {
 };
 
 // 完了タスクのタブ分け（not_started:未着手 open:未完了 done:完了）
-const activeTab = ref("not_started"); 
+// 直前に選んでいたタブを sessionStorage から復元し、画面を離れても保持する
+const activeTab = ref(sessionStorage.getItem("todoActiveTab") || "not_started");
+
+// タブが変わるたびに sessionStorage に保存する
+watch(activeTab, (newTab) => {
+  sessionStorage.setItem("todoActiveTab", newTab);
+});
 
 // 検索（AND）：名前→優先度の順に、入力されている項目だけ絞り込む
 const filteredTodos = computed(() => {
