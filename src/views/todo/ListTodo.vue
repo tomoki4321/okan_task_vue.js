@@ -151,7 +151,7 @@ const statusCounts = computed(() => {
 const barColor = (todo: Todo) => {
   if (todo.status === 3) return "#009688"; // 完了：teal
   if (todo.status === 2) return "#FFB300"; // 未完了：amber
-  return "#607D8B"; // 未着手：blue-grey
+  return "#E3F2FD"; // 未着手：blue
 };
 
 const priorityLabel = (p?: number) => (p === 1 ? "高" : p === 2 ? "中" : "低");
