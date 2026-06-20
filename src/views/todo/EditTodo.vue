@@ -4,7 +4,7 @@ import axios,{type AxiosResponse} from 'axios';
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from 'vue-router';
 import { useFlashMessageStore } from "@/stores/flash-message";
-import { nameRules, contentRules, limitRules } from "@/stores/validationRules";
+import { nameRules, contentRules, limitRules, progressRules } from "@/stores/validationRules";
 
 interface Props {
   id: number;
@@ -224,12 +224,14 @@ const labelPossible = computed(()=>{
 
           <v-text-field
             v-model="taskData.progress"
+            :rules="progressRules"
             label="進行度(%)"
             type="number"
+            min="0"
+            max="100"
             variant="outlined"
             :rounded="'xl'"
-            hide-details
-            class="mb-4"
+            class="mb-3"
           />
 
           <!-- カテゴリ追加（未追加時のみ） -->

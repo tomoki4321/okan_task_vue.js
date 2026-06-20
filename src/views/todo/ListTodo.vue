@@ -317,6 +317,7 @@ const progressColor = (p?: number) => ((p ?? 0) >= 100 ? "teal" : "blue");
             <v-btn rounded="pill" color="blue-darken-2" prepend-icon="mdi-plus" :to="{ name: 'post' }">新規タスク</v-btn>
           </div>
 
+          <!-- ライン -->>
           <v-divider class="my-4" :thickness="3" color="black" />
 
           <!-- タブ -->
