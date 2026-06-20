@@ -95,6 +95,10 @@ const filteredTodos = computed(() => {
     const map: any = { 高: 1, 中: 2, 低: 3 };
     result = result.filter((t) => t.priority === map[searchPriority.value]);
   }
+  // カレンダーで日付が選ばれていたら、その日が期日のタスクだけに絞る
+  if (selectedDate.value !== null) {
+    result = result.filter((t) => t.limit && moment(t.limit).format("YYYY-MM-DD") === selectedDate.value);
+  }
   return result;
 });
 
@@ -210,6 +214,15 @@ const calendarTaskColor = (todo: Todo) => {
   if (moment(todo.limit).isBefore(moment(), "day")) return "#E24B4A"; // 期限切れは赤
   return "#185FA5"; // 通常は青
 };
+
+// カレンダーから選んだ日付での絞り込み
+const selectedDate = ref<string | null>(null);
+const selectDateFilter = (d: moment.Moment) => {
+  const key = d.format("YYYY-MM-DD");
+  // 同じ日をもう一度クリックしたら絞り込み解除
+  selectedDate.value = selectedDate.value === key ? null : key;
+};
+const clearDateFilter = () => (selectedDate.value = null);
 </script>
 
 <template>
@@ -241,8 +254,9 @@ const calendarTaskColor = (todo: Todo) => {
         <div
           v-for="(cell, ci) in week"
           :key="ci"
-          style="min-height: 92px; padding: 6px; border-top: 1px solid #ECECEC; border-left: 1px solid #ECECEC;"
-          :style="{ backgroundColor: isToday(cell.date) ? '#FFF3D6' : undefined }"
+          style="min-height: 92px; padding: 6px; border-top: 1px solid #ECECEC; border-left: 1px solid #ECECEC; cursor: pointer;"
+          :style="{ backgroundColor: selectedDate === cell.date.format('YYYY-MM-DD') ? '#D6E8FB' : isToday(cell.date) ? '#FFF3D6' : undefined }"
+          @click="selectDateFilter(cell.date)"
         >
           <div
             class="text-caption"
@@ -390,6 +404,10 @@ const calendarTaskColor = (todo: Todo) => {
 
         <!-- タスク一覧の大きな枠（ヘッダー＋タブ＋並び順＋タスクカードを全部囲む） -->
         <v-card rounded="xl" elevation="3" class="pa-4">
+          <div v-if="selectedDate" class="d-flex align-center justify-space-between mb-4" style="gap: 8px; background-color: #D6E8FB; border-radius: 12px; padding: 10px 14px;">
+            <span class="text-body-2">{{ moment(selectedDate).format("YYYY年MM月DD日") }} のタスクのみ表示中</span>
+            <v-btn size="small" variant="text" color="blue-darken-2" @click="clearDateFilter">解除</v-btn>
+          </div>
           <!-- ヘッダー -->
           <div class="d-flex align-center justify-space-between flex-wrap" style="gap: 8px;">
             <div style="display: flex; align-items: center; gap: 16px;">
