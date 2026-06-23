@@ -35,7 +35,7 @@ const adminLogin = (): void => {
 
 <template>
   <div style="max-width: 480px; margin: 0 auto; padding: 32px 16px;">
-    <v-card rounded="xl" elevation="3" class="pa-2">
+    <v-card rounded="xl" class="pa-2 okan-card-style">
       <v-card-title>
         <div style="display: flex; align-items: center; gap: 16px; padding-top: 12px;">
           <v-avatar rounded="lg" color="blue-lighten-4" size="40" style="flex-shrink: 0;">

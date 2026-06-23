@@ -15,13 +15,21 @@ const vuetify = createVuetify({
       light: {
         dark: false,
         colors: {
-          background: "#e9eaec",
+          background: "#fff8ec",
+          primary: "#f4a627",
+          "okan-orange": "#e8632c",
+          "okan-yellow": "#f4b942",
+          "okan-cream": "#f4a627",
         },
       },
       dark: {
         dark: true,
         colors: {
           background: "#121212",
+          primary: "#f4a627",
+          "okan-orange": "#e8632c",
+          "okan-yellow": "#f4b942",
+          "okan-cream": "#f4a627",
         },
       },
     },

@@ -57,7 +57,7 @@ const avatarColor = (name?: string) => {
 <template>
   <div style="max-width: 720px; margin: 0 auto; padding: 32px 16px;">
     <!-- 大きな枠カード（ヘッダー＋ユーザーカード一覧をまとめる） -->
-    <v-card rounded="xl" elevation="3" class="pa-4">
+    <v-card rounded="xl" class="pa-4 okan-card-style">
       <!-- ヘッダー -->
       <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
         <v-avatar rounded="lg" color="blue-lighten-4" size="48" style="flex-shrink: 0;">

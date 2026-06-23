@@ -229,7 +229,7 @@ const clearDateFilter = () => (selectedDate.value = null);
   <div style="max-width: 1240px; width: 100%; margin: 0 auto; padding: 32px 16px;">
 
     <!-- 月間カレンダー（全幅） -->
-    <v-card rounded="xl" elevation="3" class="pa-4 mb-6">
+    <v-card rounded="xl" class="pa-4 mb-6 okan-card-style">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
         <v-btn icon="mdi-chevron-left" variant="text" @click="goPrevMonth" />
         <div style="display: flex; align-items: center; gap: 10px;">
@@ -280,7 +280,7 @@ const clearDateFilter = () => (selectedDate.value = null);
       <!-- 左カラム -->
       <div class="two-col-left" style="width: 340px; flex-shrink: 0;">
         <!-- 検索カード -->
-        <v-card rounded="xl" elevation="3" class="pa-4 mb-4">
+        <v-card rounded="xl" class="pa-4 mb-4 okan-card-style">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
             <v-avatar rounded="lg" color="blue-lighten-4" size="40" style="flex-shrink: 0;">
               <v-icon icon="mdi-magnify" color="blue-darken-2" />
@@ -331,7 +331,7 @@ const clearDateFilter = () => (selectedDate.value = null);
         </v-card>
 
         <!-- 今週の締切 -->
-        <v-card v-if="upcomingTodos.length > 0" rounded="xl" elevation="3" class="pa-4 mb-4">
+        <v-card v-if="upcomingTodos.length > 0" rounded="xl" class="pa-4 mb-4 okan-card-style">
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
             <v-icon icon="mdi-calendar-alert" color="amber-darken-2" />
             <span class="text-subtitle-1 font-weight-medium" style="color:#BA7517;">今週の締切</span>
@@ -347,7 +347,7 @@ const clearDateFilter = () => (selectedDate.value = null);
         </v-card>
 
         <!-- 今日の日付 -->
-        <v-card rounded="xl" elevation="3" class="pa-4">
+        <v-card rounded="xl" class="pa-4 okan-card-style">
           <div style="display: flex; align-items: center; gap: 14px;">
             <v-avatar color="blue-lighten-4" size="44" style="flex-shrink: 0;">
               <v-icon icon="mdi-calendar-today" color="blue-darken-2" />
@@ -403,7 +403,7 @@ const clearDateFilter = () => (selectedDate.value = null);
         </div>
 
         <!-- タスク一覧の大きな枠（ヘッダー＋タブ＋並び順＋タスクカードを全部囲む） -->
-        <v-card rounded="xl" elevation="3" class="pa-4">
+        <v-card rounded="xl" class="pa-4 okan-card-style">
           <div v-if="selectedDate" class="d-flex align-center justify-space-between mb-4" style="gap: 8px; background-color: #D6E8FB; border-radius: 12px; padding: 10px 14px;">
             <span class="text-body-2">{{ moment(selectedDate).format("YYYY年MM月DD日") }} のタスクのみ表示中</span>
             <v-btn size="small" variant="text" color="blue-darken-2" @click="clearDateFilter">解除</v-btn>
