@@ -4,7 +4,9 @@ import { RouterLink,RouterView,useRouter } from 'vue-router';
 import { useDisplay, useTheme } from "vuetify";
 import { useAuthStore } from './stores/auth';
 import { useFlashMessageStore } from "@/stores/flash-message";
-import IST from "@/assets/IST.png";
+import OKAN_LOGO_FULL from "@/assets/OKAN_LOGO_FULL.png";
+
+
 
 
 const messageStore = useFlashMessageStore();
@@ -39,18 +41,18 @@ const onLogout = async():Promise<void> => {
 
 <template>
   <v-app>
-    <!-- ヘッダー：白地＋下に薄い境界線 -->
-    <v-app-bar flat color="white" border="b" height="68">
+    <!-- ヘッダー：濃いオレンジ -->
+    <v-app-bar flat color="okan-cream" height="68">
       <!-- モバイル時だけハンバーガー -->
       <v-app-bar-nav-icon
         v-if="mobile"
         @click="drawer = !drawer"
-        color="blue-darken-2"
+        color="white"
       />
 
       <!-- ロゴ（クリックでトップへ） -->
       <RouterLink to="/" class="d-flex align-center ml-2" style="text-decoration: none;">
-        <v-img :src="IST" width="96" height="48" alt="IST ロゴ" />
+        <v-img :src="OKAN_LOGO_FULL" width="86" height="62" alt="おかんタスク" />
       </RouterLink>
 
       <v-spacer />
@@ -60,37 +62,36 @@ const onLogout = async():Promise<void> => {
         v-model="isDark"
         @change="toggleTheme"
         hide-details
-        color="blue-darken-2"
+        color="white"
         density="compact"
         class="mr-2"
         style="flex-grow: 0;"
       >
         <template v-slot:prepend>
-          <v-icon :icon="isDark ? 'mdi-weather-night' : 'mdi-weather-sunny'" size="20" />
+          <v-icon :icon="isDark ? 'mdi-weather-night' : 'mdi-weather-sunny'" size="20" color="white" />
         </template>
       </v-switch>
 
       <!-- PC時だけ横並びナビ -->
       <template v-if="!mobile">
         <template v-if="authStore.client == null">
-          <v-btn to="/sinup" variant="text" color="blue-darken-2" class="text-blue-darken-2">新規登録</v-btn>
-          <v-btn to="/login" variant="text" color="blue-darken-2" class="text-blue-darken-2">ログイン</v-btn>
-          <v-btn to="/" variant="text" color="blue-darken-2" class="text-blue-darken-2">TOP</v-btn>
+          <v-btn to="/sinup" variant="text" color="white">新規登録</v-btn>
+          <v-btn to="/login" variant="text" color="white">ログイン</v-btn>
+          <v-btn to="/" variant="text" color="white">TOP</v-btn>
         </template>
         <template v-else>
-          <v-btn to="/todo/post" variant="text" color="blue-darken-2" class="text-blue-darken-2">新規タスク作成</v-btn>
-          <v-btn to="/todo/index" variant="text" color="blue-darken-2" class="text-blue-darken-2">タスク一覧</v-btn>
+          <v-btn to="/todo/post" variant="text" color="white">新規タスク作成</v-btn>
+          <v-btn to="/todo/index" variant="text" color="white">タスク一覧</v-btn>
           <v-btn
             v-if="authStore.admin !== null"
             to="/user/index"
             variant="text"
-            color="blue-darken-2"
-            class="text-blue-darken-2"
+            color="white"
           >ユーザー一覧</v-btn>
           <v-btn
             @click="onLogout"
             rounded="pill"
-            color="blue-darken-2"
+            color="okan-orange"
             variant="flat"
             class="ml-2"
           >ログアウト</v-btn>
@@ -116,7 +117,7 @@ const onLogout = async():Promise<void> => {
             title="ユーザー一覧"
           />
           <v-divider class="my-2" />
-          <v-list-item @click="onLogout" prepend-icon="mdi-logout" title="ログアウト" base-color="blue-darken-2" />
+          <v-list-item @click="onLogout" prepend-icon="mdi-logout" title="ログアウト" base-color="okan-orange" />
         </template>
       </v-list>
     </v-navigation-drawer>
@@ -126,27 +127,34 @@ const onLogout = async():Promise<void> => {
       <v-slide-y-transition>
         <v-alert
           v-if="messageStore.text"
-          type="info"
-          variant="tonal"
+          variant="flat"
           rounded="lg"
-          class="ma-4"
+          class="ma-4 okan-alert"
         >{{ messageStore.text }}</v-alert>
       </v-slide-y-transition>
       <RouterView />
     </v-main>
 
-    <!-- フッター：白地＋上に薄い境界線 -->
-    <v-footer color="white" border="t" class="d-flex justify-center py-4">
-      <span class="text-caption text-medium-emphasis d-inline-flex align-center" style="gap: 6px;">
-        <v-icon icon="mdi-eye-check-outline" size="16" color="blue-darken-2" />
-        © 2023 IST
+    <!-- フッター：濃いオレンジ -->
+    <v-footer color="okan-cream" class="d-flex justify-center py-4">
+      <span class="text-caption d-inline-flex align-center" style="gap: 6px; color: #ffffff;">
+        <v-icon icon="mdi-eye-check-outline" size="16" color="white" />
+        © 2023 おかんタスク
       </span>
     </v-footer>
   </v-app>
 </template>
 
+
 <style scoped>
 .app-main {
   min-height: calc(100vh - 68px);
 }
+
+.okan-alert {
+  background-color: #2e7d32 !important;
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
 </style>

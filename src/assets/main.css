@@ -33,3 +33,33 @@ a,
     padding: 0 2rem;
   }
 } */
+
+.v-application,
+.v-application * {
+  font-family: "Yusei Magic", "M PLUS Rounded 1c", sans-serif !important;
+}
+
+.v-application .text-body-1,
+.v-application .text-h5,
+.v-application .text-h6,
+.v-application .text-subtitle-1,
+.v-application .text-body-2,
+.v-application .text-caption {
+  font-family: "Yusei Magic", "M PLUS Rounded 1c", sans-serif !important;
+}
+
+.v-icon {
+  font-family: "Material Design Icons" !important;
+}
+
+.okan-card-style {
+  border: 2px solid #f4a627 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 3px 0 #f4a627 !important;
+}
+
+.okan-card-style.okan-card-lg {
+  border-width: 3px !important;
+  border-radius: 24px !important;
+  box-shadow: 0 4px 0 #f4a627 !important;
+}
